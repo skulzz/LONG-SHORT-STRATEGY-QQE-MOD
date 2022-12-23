@@ -130,3 +130,134 @@ amount=0.1
 price=42553.4
 alert_message="${passphrase} ${exchange} ${order_type} ${pair} ${amount} ${price}"
 requests.post "$webhook_url" "$data"="$alert_message"
+# Define the profit target function
+def profitTarget(label, target):
+    # Check if the current loss exceeds the profit target
+    if strategy.position_size > 0 and strategy.position_avg_price - low[0] > target:
+        # If the current loss exceeds the profit target, exit the long trade
+        strategy.exit(label)
+    elif strategy.position_size < 0 and high[0] - strategy.position_avg_price > target:
+        # If the current loss exceeds the profit target, exit the short trade
+        strategy.exit(label)
+
+# Draw a triangle down on the chart with the text "SL"
+plotshape(series=close, title="Stop Loss Triggered", text="", style=shape.flag, color=color.white, location=location.top)
+
+# Define variables for long and short entry conditions
+longEntry = (sma > ema) and (close > trendLine)
+shortEntry = (sma < ema) and (close < trendLine)
+
+# Define variables for long and short exit conditions
+# Define long exit
+longExit = (close < sma) or (close < ema) or (close < supportLine) or stopLoss("Stop Loss", stop)
+# If the long exit condition is met, exit the trade
+# Define short exit
+shortExit = (close > sma) or (close > ema) or (close > resistanceLine) or stopLoss("Stop Loss", stop)
+
+# Set plot colors for long and short entry and exit conditions
+plotshape(longEntry, title='Long Entry', style=shape.triangleup, color=green, location=location.belowbar)
+plotshape(shortEntry, title='Short Entry', style=shape.triangledown, color=red, location=location.abovebar)
+plotshape(longExit, title='Long Exit', style=shape.cross, color=orange, location=location.belowbar)
+plotshape(shortExit, title='Short Exit', style=shape.cross, color=orange, location=location.abovebar)
+
+# Define long entry
+if longEntry:
+    strategy.entry("Long", strategy.long, stop=low[1], limit=high[1])
+    strategy.exit("Long Exit", trail_offset=3*atr(14))
+
+# Define short entry
+if shortEntry:
+    strategy.entry("Short", strategy.short, stop=high[1], limit=low[1])
+    strategy.exit("Short Exit", trail_offset=3*atr(14))
+// Define the profit target function
+profitTarget(label, target) =>
+    // Check if the current loss exceeds the profit target
+    if strategy.position_size > 0 and strategy.position_avg_price - low[0] > target
+        // If the current loss exceeds the profit target, exit the long trade
+        strategy.exit(label)
+    else if strategy.position_size < 0 and high[0] - strategy.position_avg_price > target
+        // If the current loss exceeds the profit target, exit the short trade
+        strategy.exit(label)
+// Draw a triangle down on the chart with the text "SL"
+plotshape(series=close, title="Stop Loss Triggered", text="", style=shape.flag, color=color.white, location=location.top)
+    # Check if the current low is less than the stop loss price
+   #  if strategy.position_size > 0 and low[0] < stop
+        # If the current low is less than the stop loss price, exit the trade
+     #    strategy.exit(label)
+        # Define variables for long and short entry conditions
+longEntry = (sma > ema) and (close > trendLine)
+shortEntry = (sma < ema) and (close < trendLine)
+// Define variables for long and short exit conditions
+// Define long exit
+longExit = (close < sma) or (close < ema) or (close < supportLine) or stopLoss("Stop Loss", stop)
+// If the long exit condition is met, exit the trade
+// Define short exit
+shortExit = (close > sma) or (close > ema) or (close > resistanceLine) or stopLoss("Stop Loss", stop)
+// Set plot colors for long and short entry and exit conditions
+plotshape(longEntry, title='Long Entry', style=shape.triangleup, color=green, location=location.belowbar)
+plotshape(shortEntry, title='Short Entry', style=shape.triangledown, color=red, location=location.abovebar)
+plotshape(longExit, title='Long Exit', style=shape.cross, color=orange, location=location.belowbar)
+plotshape(shortExit, title='Short Exit', style=shape.cross, color=orange, location=location.abovebar)
+//Define long entry
+if longEntry
+    strategy.entry("Long", strategy.long, stop=low[1], limit=high[1])
+    strategy.exit("Long Exit", trail_offset=3*atr(14))
+
+// Define short entry
+if shortEntry
+    strategy.entry("Short", strategy.short, stop=high[1], limit=low[1])
+    strategy.exit("Short Exit", trail_offset=3*atr(14))
+
+// Set up a listener for notifications from the API key
+api.on_notification(notification => {
+    # Check the type of the notification
+    switch (notification.type) {
+        # If the notification is a previous entry short signal...
+        case 'entryShortSignal':
+            # Close any open long positions and set the longPosition variable to false
+            # Set up a listener for notifications from the API key
+def on_notification(notification):
+    # Check the type of the notification
+    if notification.type == "entryShortSignal":
+        # Close any open long positions and set the longPosition variable to false
+        close_long_positions()
+        long_position = False
+        # Create an alert condition for the entry short signal
+        alert_condition(
+            title = "Entry Short Signal",
+            message = "An entry short signal has been received. Close any open long positions and set the longPosition variable to false.",
+            condition = True
+        )
+    elif notification.type == "entryLongSignal":
+        # Open a long position and set the longPosition variable to true
+        open_long_position()
+        long_position = True
+        # Create an alert condition for the entry long signal
+        alert_condition(
+            title = "Entry Long Signal",
+            message = "An entry long signal has been received. Open a long position and set the longPosition variable to true.",
+            condition = True
+        )
+    elif notification.type == "exitShortSignal":
+        # Close any open short positions
+        close_short_positions()
+        # Create an alert condition for the exit short signal
+        alert_condition(
+            title = "Exit Short Signal",
+            message = "An exit short signal has been received. Close any open short positions.",
+            condition = True
+        )
+    elif notification.type == "exitLongSignal":
+        # Close any open long positions and set the longPosition variable to false
+        close_long_positions()
+        long_position = False
+        # Create an alert condition for the exit long signal
+        alert_condition(
+            title = "Exit Long Signal",
+            message = "An exit long signal has been received. Close any open long positions and set the longPosition variable to false.",
+            condition = True
+        )
+
+# Set a default output function to prevent errors
+def plot():
+    return 0
