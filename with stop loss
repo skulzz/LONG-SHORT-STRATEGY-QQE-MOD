@@ -185,4 +185,4 @@ profitTarget(label, target) =>
         // If the current loss exceeds the profit target, exit the short trade
         strategy.exit(label)
 // Draw a triangle down on the chart with the text "SL"
-plotshape(series=close, title="Stop Loss Triggered", text="", style=shape.flag, color=color.white, location=location.top)
+//plotshape(series=close, title="Stop Loss Triggered", text="", style=shape.flag, color=color.white, location=location.top)
