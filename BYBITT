@@ -1,0 +1,138 @@
+from flask import Flask, request
+import pyzmail
+import json
+import imapclient
+
+def execute_trade_from_email():
+    # Connect to email server
+    imap_client = imapclient.IMAPClient('imap.example.com', ssl=True)
+    imap_client.login('username', 'password')
+    imap_client.select_folder('INBOX')
+
+    # Search for email with desired data
+    search_criteria = ['SUBJECT', 'Trade Data']
+    uid_list = imap_client.search(search_criteria)
+    
+app = Flask(__name__)
+
+@app.route('/ex', methods=['POST'])
+def execute_trade():
+    # Get the email body from the request
+    email_body = request.form['body']
+    
+    # Parse the email using pyzmail
+    mail = pyzmail.PyzMessage.factory(email_body)
+    email_text = mail.text_part.get_payload().decode(mail.text_part.charset)
+    
+    # Extract information from email's body
+    email = imap_client.fetch([uid_list[0]], ['BODY[]'])
+    email_body = email[uid_list[0]][b'BODY[]'].decode()
+    passphrase = email_body.split('Passphrase: ')[1].split('\n')[0]
+    time = email_body.split('Time: ')[1].split('\n')[0]
+    exchange = email_body.split('Exchange: ')[1].split('\n')[0]
+    ticker = email_body.split('Ticker: ')[1].split('\n')[0]
+    open = email_body.split('Open: ')[1].split('\n')[0]
+    high = email_body.split('High: ')[1].split('\n')[0]
+    low = email_body.split('Low: ')[1].split('\n')[0]
+    close = email_body.split('Close: ')[1].split('\n')[0]
+    volume = email_body.split('Volume: ')[1].split('\n')[0]
+    strategy_position_size = email_body.split('Position Size: ')[1].split('\n')[0]
+    strategy_order_action = email_body.split('Order Action: ')[1].split('\n')[0]
+    strategy_order_contracts = email_body.split('Order Contracts: ')[1].split('\n')[0]
+    strategy_order_price = email_body.split('Order Price: ')[1].split('\n')[0]
+    strategy_order_id = email_body.split('Order ID: ')[1].split('\n')[0]
+    strategy_market_position = email_body.split('Market Position: ')[1].split('\n')[0]
+    strategy_market_position_size = email_body.split('Market Position Size: ')[1].split('\n')[0]
+    strategy_prev_market_position = email_body.split('Previous Market Position: ')[1].split('\n')[0]
+    # Extract the relevant information from the email
+    passphrase = email_text.split("Passphrase: ")[1].split("\n")[0]
+    strategy_position_size = email_text.split("Position size: ")[1].split("\n")[0]
+    strategy_order_action = email_text.split("Order action: ")[1].split("\n")[0]
+    strategy_order_contracts = email_text.split("Order contracts: ")[1].split("\n")[0]
+    strategy_order_price = email_text.split("Order price: ")[1].split("\n")[0]
+    strategy_order_id = email_text.split("Order ID: ")[1].split("\n")[0]
+    strategy_market_position = email_text.split("Market position: ")[1].split("\n")[0]
+    strategy_market_position_size = email_text.split("Market position size: ")[1].split("\n")[0]
+    strategy_prev_market_position = email_text.split("Previous market position: ")[1].split("\n")[0]
+    strategy_prev_market_position_size = email_text.split("Previous market position size: ")[1].split("\n")[0]
+    
+    # Check if the passphrase in the email matches the expected passphrase
+    expected_passphrase = "a321!"
+    if passphrase != expected_passphrase:
+        return "Invalid passphrase. Trade not executed."
+    
+    # create json data
+    json_data = {
+        "passphrase": passphrase,
+        "time": "{{timenow}}",
+        "exchange": "{{exchange}}",
+        "ticker": "{{ticker}}",
+        "bar": {
+            "time": "{{ticker}}",
+            "open": "{{open}}",
+            "high": "{{high}}",
+            "low": "{{low}}",
+            "close": "{{close}}",
+            "volume": "{{volume}}",
+        },
+        "strategy": {
+            "position_size": strategy_position_size,
+            "order_action": strategy_order_action,
+            "order_contracts": strategy_order_contracts,
+            "order_price": strategy_order_price,
+            "order_id": strategy_order_id,
+            "market_position": strategy_market_position,
+            "position_size": strategy_position_size,
+            "order_action": strategy_order_action,
+            "order_contracts": strategy_order_contracts,
+            "order_price": strategy_order_price,
+            "order_id": strategy_order_id,
+                    }
+    }
+    # Connect to the email server
+server = pyzmail.PyzMail("YOUR_EMAIL_ADDRESS", "YOUR_EMAIL_PASSWORD", "imap.example.com")
+
+# Fetch the most recent email
+emails = server.fetch_by_subject("Trade Execution")
+
+# Parse the email
+email = emails[-1]
+
+# Get the body of the email
+email_body = email.text_part.get_payload().decode(email.text_part.charset)
+
+# Extract the passphrase from the email
+passphrase = email_body.split('Passphrase: ')[1].split('\n')[0]
+
+# Check if the passphrase in the email matches the passphrase in the json data
+if passphrase != json_data["passphrase"]:
+    return "Error: Incorrect passphrase."
+
+# Extract the other information from the email
+
+
+# Place the order
+order_response = client.Order.Order_new(side=json_data["strategy"]["order_action"], symbol=json_data["ticker"], order_type="Limit", qty=json_data["strategy"]["order_contracts"], price=json_data["strategy"]["order_price"], time_in_force="GoodTillCancel").result()
+
+# Print the response
+print(order_response)
+
+# Get the order ID from the response
+order_id = order_response["result"]["order_id"]
+
+# Get the order details
+order_details = client.Order.Order_query(symbol=json_data["ticker"], order_id=order_id).result()
+
+# Print the order details
+print(order_details)
+
+# Check the status of the order
+status = order_details["result"]["order_status"]
+
+# If the order is filled, print a message
+if status == "Filled":
+    print("Order filled!")
+    return "Order filled!"
+else:
+    print("Order not filled.")
+    return "Order not filled."
