@@ -260,12 +260,11 @@ json_data = {
         "volume": "{{volume}}",
     },
     "strategy": {
-        "side": json_data["strategy"]["order_action"],
-        "symbol": json_data["ticker"],
+        "side": "side",
+        "symbol": "symbol",
         "order_type": "Limit",
-        "qty": json_data["strategy"]["order_contracts"],
-        "price": json_data["strategy"]["order_price"],
+        "qty": "qty",
+        "price": "price",
         "time_in_force": "GoodTillCancel"
     }
 }
-    
