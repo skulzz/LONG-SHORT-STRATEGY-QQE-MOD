@@ -85,3 +85,30 @@ return jsonify(error=str(e))
 
 if name == 'main':
 app.run()
+
+# import the necessary libraries
+import imapclient
+import pyzmail
+
+# connect to the email server
+imap_obj = imapclient.IMAPClient('imap.gmail.com', ssl=True)
+imap_obj.login('your_email_address', 'your_password')
+imap_obj.select_folder('INBOX', readonly=True)
+
+# search for specific emails
+UIDs = imap_obj.search(['SINCE 20-Jan-2022'])
+
+# fetch desired email
+raw_messages = imap_obj.fetch(UIDs, ['BODY[]'])
+
+# parse email
+messages = [pyzmail.PyzMessage.factory(raw_message[b'BODY[]']) for _, raw_message in raw_messages.items()]
+
+# extract the relevant data
+for message in messages:
+    print(message.get_subject())
+    print(message.get_addresses('from'))
+    print(message.text_part.get_payload().decode('UTF-8'))
+
+# close the connection
+imap_obj.logout()
