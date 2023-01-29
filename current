@@ -141,3 +141,56 @@ if status == "Filled":
     print("Order filled!")
 else:
     print("Order not filled.")
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    # Loop through new emails
+for email_id in email_ids:
+    status, email_data = server.fetch(email_id, "(RFC822)")
+    email_body = email_data[0][1]
+    email = pyzmail.PyzMessage.factory(email_body)
+    if email.text_part != None:
+        email_text = email.text_part.get_payload().decode(email.text_part.charset)
+    else:
+        email_text = email.html_part.get_payload().decode(email.html_part.charset)
+
+    # Parse email text
+    if "Exchange:" in email_text:
+        exchange = email_text.split("Exchange:")[1].split("\n")[0]
+    if "Ticker:" in email_text:
+        ticker = email_text.split("Ticker:")[1].split("\n")[0]
+    if "Open:" in email_text:
+        open = email_text.split("Open:")[1].split("\n")[0]
+    if "High:" in email_text:
+        high = email_text.split("High:")[1].split("\n")[0]
+    if "Low:" in email_text:
+        low = email_text.split("Low:")[1].split("\n")[0]
+    if "Close:" in email_text:
+        close = email_text.split("Close:")[1].split("\n")[0]
+    if "Volume:" in email_text:
+        volume = email_text.split("Volume:")[1].split("\n")[0]
+    
