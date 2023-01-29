@@ -89,7 +89,7 @@ if passphrase != json_data["passphrase"]:
 
 # Extract the other information from the email
 # Initialize the Bybit client
-client = Bybit(test=True)
+client = bybit.BybitClient(api_key='YOUR_API_KEY', secret_key='YOUR_SECRET_KEY')
 
 # Authenticate using your API key
 client.authenticate(api_key=json_data["api_key"], secret_key=json_data["secret_key"])
