@@ -268,3 +268,40 @@ json_data = {
         "time_in_force": "GoodTillCancel"
     }
 }
+
+
+
+
+
+import imaplib
+import time
+
+# Connect to the IMAP server
+imap_server = imaplib.IMAP4_SSL("imap.example.com")
+imap_server.login("your_email@example.com", "your_password")
+
+# Select the inbox as the current mailbox
+imap_server.select("inbox")
+
+while True:
+    # Check for new emails
+    result, data = imap_server.search(None, "UNSEEN")
+    email_ids = data[0].split()
+
+    # Process the new emails
+    for email_id in email_ids:
+        result, data = imap_server.fetch(email_id, "(RFC822)")
+        email_message = email.message_from_bytes(data[0][1])
+
+        # Extract the relevant information from the email
+        sender = email_message["From"]
+        subject = email_message["Subject"]
+        body = email_message.get_payload()
+
+        # Do something with the email information, such as logging it or triggering a trade
+        print("From:", sender)
+        print("Subject:", subject)
+        print("Body:", body)
+
+    # Wait for 20 seconds before checking for new emails again
+    time.sleep(20)
