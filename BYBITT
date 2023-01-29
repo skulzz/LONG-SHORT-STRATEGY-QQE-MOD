@@ -169,3 +169,32 @@ if status == "Filled":
     print("Order filled!")
 else:
     print("Order not filled.")
+    
+    # Define json data
+json_data = {
+    "passphrase": passphrase,
+    "time": "{{timenow}}",
+    "exchange": "{{exchange}}",
+    "ticker": "{{ticker}}",
+    "bar": {
+        "time": "{{ticker}}",
+        "open": "{{open}}",
+        "high": "{{high}}",
+        "low": "{{low}}",
+        "close": "{{close}}",
+        "volume": "{{volume}}",
+    },
+    "strategy": {
+        "position_size": strategy_position_size,
+        "order_action": strategy_order_action,
+        "order_contracts": strategy_order_contracts,
+        "order_price": strategy_order_price,
+        "order_id": strategy_order_id,
+        "market_position": strategy_market_position,
+        "position_size": strategy_position_size,
+        "order_action": strategy_order_action,
+        "order_contracts": strategy_order_contracts,
+        "order_price": strategy_order_price,
+        "order_id": strategy_order_id,
+    }
+}
