@@ -232,3 +232,40 @@ if status == "Filled":
     print("Order filled!")
 else:
     print("Order not filled.")
+    
+    
+    
+    
+    
+    # Initialize the client
+client = bybit.Bybit(api_key='YOUR_API_KEY', api_secret='YOUR_API_SECRET')
+
+# Place the order
+order_response = client.Order.Order_new(side=json_data["strategy"]["side"], symbol=json_data["strategy"]["symbol"], order_type=json_data["strategy"]["order_type"], qty=json_data["strategy"]["qty"], price=json_data["strategy"]["price"], time_in_force=json_data["strategy"]["time_in_force"]).result()
+
+# Print the response
+print(order_response)
+
+json_data = {
+    "passphrase": passphrase,
+    "time": "{{timenow}}",
+    "exchange": "{{exchange}}",
+    "ticker": "{{ticker}}",
+    "bar": {
+        "time": "{{ticker}}",
+        "open": "{{open}}",
+        "high": "{{high}}",
+        "low": "{{low}}",
+        "close": "{{close}}",
+        "volume": "{{volume}}",
+    },
+    "strategy": {
+        "side": json_data["strategy"]["order_action"],
+        "symbol": json_data["ticker"],
+        "order_type": "Limit",
+        "qty": json_data["strategy"]["order_contracts"],
+        "price": json_data["strategy"]["order_price"],
+        "time_in_force": "GoodTillCancel"
+    }
+}
+    
