@@ -1,0 +1,65 @@
+import imapclient
+import pyzmail
+import json
+from bybit import Bybit
+
+# Connect to the email server
+imap_obj = imapclient.IMAPClient('imap.gmail.com', ssl=True)
+imap_obj.login('your_email_address', 'your_password')
+imap_obj.select_folder('INBOX', readonly=True)
+
+# Search for specific emails
+UIDs = imap_obj.search(['SINCE 20-Jan-2022'])
+
+while True:
+    # Fetch desired email
+    raw_messages = imap_obj.fetch(UIDs, ['BODY[]'])
+
+    # Parse email
+    messages = [pyzmail.PyzMessage.factory(raw_message[b'BODY[]']) for _, raw_message in raw_messages.items()]
+
+    # Extract the relevant data
+    for message in messages:
+        # Get email subject
+        subject = message.get_subject()
+        # Get sender email
+        sender = message.get_addresses('from')
+        # Get email body
+        email_body = message.text_part.get_payload().decode('UTF-8')
+        try:
+            # Parse json data from email body
+            data = json.loads(email_body)
+            # Get passphrase from json data
+            passphrase = data["passphrase"]
+            # Get time from json data
+            time = data["time"]
+            # Get exchange from json data
+            exchange = data["exchange"]
+            # Get ticker from json data
+            ticker = data["ticker"]
+            # Get bar data from json data
+            bar = data["bar"]
+            bar_time = bar["time"]
+            bar_open = bar["open"]
+            bar_high = bar["high"]
+            bar_low = bar["low"]
+            bar_close = bar["close"]
+            bar_volume = bar["volume"]
+            # Get strategy data from json data
+            strategy = data["strategy"]
+            position_size = strategy["position_size"]
+            order_action = strategy["order_action"]
+            order_contracts = strategy["order_contracts"]
+            order_price = strategy["order_price"]
+            order_id = strategy["order_id"]
+            market_position = strategy["market_position"]
+            market_position_size = strategy["market_position_size"]
+            prev_market_position = strategy["prev_market_position"]
+            prev_market_position_size = strategy["prev_market_position_size"]
+            
+            # Connect to Bybit API
+            bybit_api_key = ""
+            bybit_secret_key = ""
+            bybit = Bybit(test=True, api_key=bybit_api_key, secret_key=bybit_secret_key)
+            
+            # Place order on Bybit
