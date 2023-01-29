@@ -164,33 +164,28 @@ else:
     
     
     
-    
-    
-    
-    
-    # Loop through new emails
-for email_id in email_ids:
-    status, email_data = server.fetch(email_id, "(RFC822)")
-    email_body = email_data[0][1]
-    email = pyzmail.PyzMessage.factory(email_body)
-    if email.text_part != None:
-        email_text = email.text_part.get_payload().decode(email.text_part.charset)
-    else:
-        email_text = email.html_part.get_payload().decode(email.html_part.charset)
+        # Search for new emails
+    _, msg_ids = conn.search(None, 'UNSEEN')
+    msg_ids = msg_ids[0].split()
 
-    # Parse email text
-    if "Exchange:" in email_text:
-        exchange = email_text.split("Exchange:")[1].split("\n")[0]
-    if "Ticker:" in email_text:
-        ticker = email_text.split("Ticker:")[1].split("\n")[0]
-    if "Open:" in email_text:
-        open = email_text.split("Open:")[1].split("\n")[0]
-    if "High:" in email_text:
-        high = email_text.split("High:")[1].split("\n")[0]
-    if "Low:" in email_text:
-        low = email_text.split("Low:")[1].split("\n")[0]
-    if "Close:" in email_text:
-        close = email_text.split("Close:")[1].split("\n")[0]
-    if "Volume:" in email_text:
-        volume = email_text.split("Volume:")[1].split("\n")[0]
-    
+    # Iterate through new emails
+    for msg_id in msg_ids:
+        _, msg_data = conn.fetch(msg_id, "(RFC822)")
+        msg = pyzmail.PyzMessage.factory(msg_data[0][1])
+
+        # Check if email is from the correct sender
+        if msg.get_address("from")[1] == "sender@example.com":
+            # Parse email body
+            email_body = msg.text_part.get_payload().decode(msg.text_part.charset)
+
+            # Extract necessary information from email
+            timenow = email_body.split("Time: ")[1].split("\n")[0]
+            exchange = email_body.split("Exchange: ")[1].split("\n")[0]
+            ticker = email_body.split("Ticker: ")[1].split("\n")[0]
+            open_price = email_body.split("Open: ")[1].split("\n")[0]
+            high_price = email_body.split("High: ")[1].split("\n")[0]
+            low_price = email_body.split("Low: ")[1].split("\n")[0]
+            close_price = email_body.split("Close: ")[1].split("\n")[0]
+            volume = email_body.split("Volume: ")[1].split("\n")[0]
+
+ 
