@@ -144,3 +144,28 @@ if status == "Filled":
 else:
     print("Order not filled.")
     return "Order not filled."
+    
+    
+    # Place the order
+order_response = bybit.Order.Order_new(side=json_data["strategy"]["order_action"], symbol=json_data["ticker"], order_type="Limit", qty=json_data["strategy"]["order_contracts"], price=json_data["strategy"]["order_price"], time_in_force="GoodTillCancel").result()
+
+# Print the response
+print(order_response)
+
+# Get the order ID from the response
+order_id = order_response["result"]["order_id"]
+
+# Get the order details
+order_details = bybit.Order.Order_query(symbol=json_data["ticker"], order_id=order_id).result()
+
+# Print the order details
+print(order_details)
+
+# Check the status of the order
+status = order_details["result"]["order_status"]
+
+# If the order is filled, print a message
+if status == "Filled":
+    print("Order filled!")
+else:
+    print("Order not filled.")
