@@ -1,0 +1,62 @@
+import imapclient
+import pyzmail
+import json
+from flask import Flask, request
+import bybit
+
+app = Flask(__name__)
+
+@app.route("/")
+def execute_trade():
+    # connect to the email server
+    imap_obj = imapclient.IMAPClient('imap.gmail.com', ssl=True)
+    imap_obj.login('your_email_address', 'your_password')
+    imap_obj.select_folder('INBOX', readonly=True)
+
+    # search for specific emails
+    UIDs = imap_obj.search(['SINCE 20-Jan-2022'])
+
+    # fetch desired email
+    raw_messages = imap_obj.fetch(UIDs, ['BODY[]'])
+
+    # parse email
+    messages = [pyzmail.PyzMessage.factory(raw_message[b'BODY[]']) for _, raw_message in raw_messages.items()]
+
+    # extract the relevant data
+    for message in messages:
+        subject = message.get_subject()
+        sender = message.get_addresses('from')
+        payload = message.text_part.get_payload().decode('UTF-8')
+        
+        # parse json data
+        data = json.loads(payload)
+        
+        # extract data from json
+        passphrase = data["passphrase"]
+        time = data["time"]
+        exchange = data["exchange"]
+        ticker = data["ticker"]
+        bar = data["bar"]
+        strategy = data["strategy"]
+        
+        # check passphrase
+        if passphrase != "a321!":
+            return "Invalid passphrase"
+        
+        # execute trade
+        bybit_client = bybit.Client(api_key='YOUR_API_KEY', api_secret='YOUR_API_SECRET')
+        order_action = strategy["order_action"]
+        order_contracts = strategy["order_contracts"]
+        order_price = strategy["order_price"]
+        order_id = strategy["order_id"]
+        if order_action == "buy":
+            result = bybit.buy(symbol=ticker, qty=order_contracts, price=order_price, order_id=order_id)
+        elif order_action == "sell":
+            result = bybit.sell(symbol=ticker, qty=order_contracts, price=order_price, order_id=order_id)
+        else:
+            return "Invalid order action"
+        
+        return result
+   
+    # close the connection
+    imap_obj.logout()
