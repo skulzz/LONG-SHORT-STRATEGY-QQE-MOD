@@ -43,6 +43,29 @@ On instance:
      'ret_msg': 'API key is invalid.',
      'time_now': '1675073368.248223'}
 
+123
+# Place Active Order
+response = client.Order.Order_new(side="Buy",symbol="BTCUSD",order_type="Limit",qty=1,price=8300,time_in_force="GoodTillCancel")
+if response.ret_code == 0:
+    print("Order placed successfully")
+else:
+    print("Order placement failed with error code:", response.ret_code)
+
+# Get Active Order
+response = client.Order.Order_getOrders(symbol="BTCUSD")
+if response.ret_code == 0:
+    print("Active orders:", response.result)
+else:
+    print("Failed to retrieve active orders with error code:", response.ret_code)
+
+# Cancel Active Order
+order_id = "123456" # Replace with the actual order_id
+response = client.Order.Order_cancel(order_id=order_id)
+if response.ret_code == 0:
+    print("Order cancelled successfully")
+else:
+    print("Order cancellation failed with error code:", response.ret_code)
+
 
 
 unseen_mails = list(imap_server.search("UNSEEN"))
