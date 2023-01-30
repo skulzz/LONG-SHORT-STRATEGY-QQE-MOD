@@ -1,5 +1,33 @@
  /home/j/py/.venv/bin/python /home/j/py/app.py
 Traceback (most recent call last):
+  File "/home/j/py/app.py", line 19, in <module>
+    imap_server = IMAPClient('imap-mail.outlook.com",993')
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 285, in __init__
+    self._imap = self._create_IMAP4()
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 322, in _create_IMAP4
+    return tls.IMAP4_TLS(
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/tls.py", line 44, in __init__
+    imaplib.IMAP4.__init__(self, host, port)
+  File "/usr/lib/python3.10/imaplib.py", line 202, in __init__
+    self.open(host, port, timeout)
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/tls.py", line 49, in open
+    sock = socket.create_connection(
+  File "/usr/lib/python3.10/socket.py", line 824, in create_connection
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+  File "/usr/lib/python3.10/socket.py", line 955, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno -2] Name or service not known
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ /home/j/py/.venv/bin/python /home/j/py/app.py
+Traceback (most recent call last):
   File "/home/j/py/app.py", line 79, in <module>
     data = request.data
   File "/home/j/.local/lib/python3.10/site-packages/werkzeug/local.py", line 316, in __get__
