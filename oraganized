@@ -12,6 +12,7 @@ This typically means that you attempted to use functionality that needed
 an active HTTP request. Consult the documentation on testing for
 information about how to avoid this problem.
 
+data = '{"passphrase": "xyz", "time": "2023-01-01T12:00:00", "exchange": "abc", "ticker": "abc_123", "bar": {"time": "2023-01-01T12:00:00", "open": 100.0, "high": 101.0, "low": 99.0, "close": 100.5, "volume": 1000}, "strategy": {"position_size": 100, "order_action": "buy", "order_contracts": 5, "order_price": 100.0, "order_id": 123456, "market_position": "long", "market_position_size": 5}, "account": {"side": "buy", "symbol": "abc_123", "order_type": "limit", "qty": 5, "price": 100.0, "time_in_force": "gtc"}}'
 
 
 
