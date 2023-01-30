@@ -32,6 +32,39 @@ def execute_trade():
 # emails = imap_server.search(['SUBJECT "Alert:"'])
 
 
+# Extract the other information from the email
+api_key = json_data["api_key"]
+secret_key = json_data["secret_key"]
+strategy = json_data["strategy"]
+
+# Initialize the Bybit client
+client = bybit.BybitClient(api_key=api_key, secret_key=secret_key)
+
+# Place the order
+order_response = client.Order.Order_new(side=strategy["side"], symbol=strategy["symbol"], order_type=strategy["order_type"],
+                                        qty=strategy["qty"], price=strategy["price"], time_in_force=strategy["time_in_force"]).result()
+
+# Print the response
+print(order_response)
+
+# Get the order ID from the response
+order_id = order_response["result"]["order_id"]
+
+# Get the order details
+order_details = client.Order.Order_query(symbol=json_data["ticker"], order_id=order_id).result()
+
+# Print the order details
+print(order_details)
+
+# Check the status of the order
+status = order_details["result"]["order_status"]
+
+# If the order is filled, print a message
+if status == "Filled":
+    print("Order filled!")
+else:
+    print("Order not filled.")
+
 # Process the new emails
         for email_id, email_data in unseen_mails.fetch(unseen_mails, 'RFC822').items():
     # Iterate through the messages
@@ -176,3 +209,11 @@ if status == "Filled":
     print("Order filled!")
 else:
     print("Order not filled.")
+
+
+
+
+
+
+
+
