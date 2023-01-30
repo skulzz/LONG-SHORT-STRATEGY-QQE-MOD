@@ -2,6 +2,40 @@
 "timestamp": "{{timestamp}}",
 "exchange": "{{exchange}}",
 "symbol": "{{ticker}}",
+"candle": { 
+        "open": "{{open}}",
+        "high": "{{high}}",
+        "low": "{{low}}",
+        "close": "{{close}}",
+        "volume": "{{volume}}",
+},
+"order": {
+"side": "side",
+"symbol": "symbol",
+"type": "Limit",
+"qty": "qty",
+"price": "price",
+"time_in_force": "gtc"
+},
+"passphrase": "{{passphrase}}"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"timestamp": "{{timestamp}}",
+"exchange": "{{exchange}}",
+"symbol": "{{ticker}}",
 "candle": {
 "timestamp": "{{timestamp}}",
 "open": "{{open}}",
