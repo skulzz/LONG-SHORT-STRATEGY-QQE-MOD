@@ -252,6 +252,6 @@ for email_id in emails:
 Note that this code is just a sample and you will need to replace the placeholders such as 'imap.example.com', 'your_username', 'your_password' with the appropriate values for your email server. Also, you will need to fill in the values for the other placeholders in the json_data such as {{timenow}}, {{exchange}}, {{ticker}} and so on.
 
 
-
+imap_client.mark_seen(unseen_messages)
 
 
