@@ -14,7 +14,13 @@ imap_server.set_flags([email_id], [b'\\Seen'])
  
  
  
- 
+ # print(client.Order.Order_cancel(symbol="BTCUSD", order_id="a0bc44c0-6ddb-4f41-913d-fa9d5299d7c2").result())
+# Cancel All Active Orders
+# print(client.Order.Order_cancelAll(symbol="BTCUSD").result())
+# Replace Active Order
+# print(client.Order.Order_replace(symbol="BTCUSD", order_id="e838ebcd-77be-43e7-ae4a-9bc380bad6ec", p_r_qty="3").result())
+# Query Active Orders(real-time)
+# print(client.Order.Order_query(symbol="BTCUSD", order_id="e838ebcd-77be-43e7-ae4a-9bc380bad6ec").result())
  
  
  /home/j/py/.venv/bin/python /home/j/py/app.py
