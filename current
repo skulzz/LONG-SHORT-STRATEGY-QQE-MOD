@@ -207,3 +207,51 @@ messages = imap_server.fetch(emails, ['BODY[]'])
 for email_id, email_data in messages.items():
 
  
+
+
+
+
+
+
+
+
+# Iterate through each email
+for email_id in emails:
+    email = imap_obj.fetch([email_id], ['BODY[]'])
+
+    # Get the body of the email
+    email_body = email[email_id][b'BODY[]'].decode()
+
+    # Extract the passphrase from the email
+    passphrase = email_body.split('Passphrase: ')[1].split('\n')[0]
+
+    # Define json data
+    json_data = {
+        "passphrase": passphrase,
+        "time": "{{timenow}}",
+        "exchange": "{{exchange}}",
+        "ticker": "{{ticker}}",
+        "bar": {
+            "time": "{{ticker}}",
+            "open": "{{open}}",
+            "high": "{{high}}",
+            "low": "{{low}}",
+            "close": "{{close}}",
+            "volume": "{{volume}}",
+        },
+        "strategy": {
+            "side": "side",
+            "symbol": "symbol",
+            "order_type": "Limit",
+            "qty": "qty",
+            "price": "price",
+            "time_in_force": "GoodTillCancel"
+        }
+    }
+    print(json_data)
+Note that this code is just a sample and you will need to replace the placeholders such as 'imap.example.com', 'your_username', 'your_password' with the appropriate values for your email server. Also, you will need to fill in the values for the other placeholders in the json_data such as {{timenow}}, {{exchange}}, {{ticker}} and so on.
+
+
+
+
+
