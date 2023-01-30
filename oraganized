@@ -1,3 +1,22 @@
+ /home/j/py/.venv/bin/python /home/j/py/app.py
+Traceback (most recent call last):
+  File "/home/j/py/app.py", line 79, in <module>
+    data = request.data
+  File "/home/j/.local/lib/python3.10/site-packages/werkzeug/local.py", line 316, in __get__
+    obj = instance._get_current_object()  # type: ignore[misc]
+  File "/home/j/.local/lib/python3.10/site-packages/werkzeug/local.py", line 513, in _get_current_object
+    raise RuntimeError(unbound_message) from None
+RuntimeError: Working outside of request context.
+
+This typically means that you attempted to use functionality that needed
+an active HTTP request. Consult the documentation on testing for
+information about how to avoid this problem.
+
+
+
+
+
+
 from flask import Flask, request
 import pyzmail
 import json
