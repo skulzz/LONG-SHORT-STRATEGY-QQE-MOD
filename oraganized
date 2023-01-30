@@ -209,6 +209,55 @@ if status == "Filled":
     print("Order filled!")
 else:
     print("Order not filled.")
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    json_data = {
+    "passphrase": "a321!",
+    "time": "2023-01-30T12:00:00Z",
+    "exchange": "NYSEMkt",
+    "ticker": "AAPL",
+    "bar": {
+        "time": "2023-01-30T12:00:00Z",
+        "open": 132.5,
+        "high": 135.0,
+        "low": 131.0,
+        "close": 132.0,
+        "volume": 100000
+    },
+    "strategy": {
+        "position_size": 10,
+        "order_action": "buy",
+        "order_contracts": 10,
+        "order_price": 132.0,
+        "order_id": "Close position order",
+        "market_position": "long",
+        "market_position_size": 10,
+        "prev_market_position": "short"
+    },
+    "account": {
+        "side": "buy",
+        "symbol": "AAPL",
+        "order_type": "Limit",
+        "qty": 100,
+        "price": 132.0,
+        "time_in_force": "GoodTillCancel"
+    }
+}
+    
+    
+    
+    
+    
 
 
 
