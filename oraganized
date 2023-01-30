@@ -404,3 +404,30 @@ passphrase = json_data.get("passphrase", None)
 if passphrase != expected_passphrase:
     print("Invalid passphrase. Trade not executed.")
     exit()
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        while True:
+        unseen_mails = imap_server.search(['UNSEEN'])
+        for email_id, email_data in imap_server.fetch(unseen_mails, 'RFC822').items():
+            email_body = email_data.get_body().decode()
+            passphrase = re.search(r'Passphrase: (.*)', email_body).group(1)
+            strategy_position_size = re.search(r'Position size: (.*)', email_body).group(1)
+            strategy_order_action = re.search(r'Order action: (.*)', email_body).group(1)
+            strategy_order_contracts = re.search(r'Order contracts: (.*)', email_body).group(1)
+            strategy_order_price = re.search(r'Order price: (.*)', email_body).group(1)
+            strategy_order_id = re.search(r'Order ID: (.*)', email_body).group(1)
+            strategy_market_position = re.search(r'Market position: (.*)', email_body).group(1)
+            strategy_market_position_size = re.search(r'Market position size: (.*)', email_body).group(1)
+            strategy_prev_market_position = re.search(r'Previous market position: (.*)', email_body).group(1)
+            strategy_prev_market_position_size = re.search(r'Previous market position size: (.*)', email_body).group(1)
+        imap_server.mark_seen([email_id])
+        time.sleep(5)
