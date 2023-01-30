@@ -32,6 +32,10 @@ def execute_trade():
 # emails = imap_server.search(['SUBJECT "Alert:"'])
 
 
+
+if json_data.get("passphrase") != expected_passphrase:
+    print("Invalid passphrase. Trade not executed.")
+    exit()
 # Extract the other information from the email
 api_key = json_data["api_key"]
 secret_key = json_data["secret_key"]
@@ -334,4 +338,8 @@ if "passphrase" in json_data and json_data["passphrase"] != expected_passphrase:
 
 
 
-
+expected_passphrase = "a321!"
+passphrase = json_data.get("passphrase", None)
+if passphrase != expected_passphrase:
+    print("Invalid passphrase. Trade not executed.")
+    exit()
