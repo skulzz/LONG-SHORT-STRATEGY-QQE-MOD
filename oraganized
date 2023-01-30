@@ -1,3 +1,21 @@
+
+
+({'ret_code': 10001, 'ret_msg': 'params error: symbol invalid symbol', 'result': {}, 'ext_code': '', 'ext_info': '', 'time_now': '1675079133.730800', 'rate_limit_status': 99, 'rate_limit': 100, 'rate_limit_reset_ms': 1675079133719}, <bravado.requests_client.RequestsResponseAdapter object at 0x7fe82f683c40>)
+({'ret_code': 10001, 'ret_msg': 'params error: symbol invalid symbol', 'result': {}, 'ext_code': '', 'ext_info': '', 'time_now': '1675079134.009226', 'rate_limit_status': 599, 'rate_limit': 600, 'rate_limit_reset_ms': 1675079134008}, <bravado.requests_client.RequestsResponseAdapter object at 0x7fe82f682d40>)
+({'ret_code': 10001, 'ret_msg': 'params error: symbol invalid symbol', 'result': {}, 'ext_code': '', 'ext_info': '', 'time_now': '1675079134.439355', 'rate_limit_status': 119, 'rate_limit': 120, 'rate_limit_reset_ms': 1675079134438}, <bravado.requests_client.RequestsResponseAdapter object at 0x7fe82f682d70>)
+strategy = json_data["strategy"]
+
+## Initialize the Bybit client
+client = bybit.bybit(test=False, api_key= "76QjbsflcrBdSZiSrU", api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
+# Place the order
+print(client.Order.Order_new(side="side", symbol="symbol", order_type="order_type", qty=100, price=100, time_in_force="time_in_force").result())
+# Get the order ID from the response
+print(client.Order.Order_getOrders(symbol="symbol").result())
+# My Position
+print(client.Positions.Positions_myPosition(symbol="symbol").result())
+# If the order is filled, print a message
+
+
 76QjbsflcrBdSZiSr
 SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32p
 ## Initialize the Bybit client
