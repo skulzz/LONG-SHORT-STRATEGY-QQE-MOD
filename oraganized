@@ -1,10 +1,25 @@
 
-
-({'ret_code': 10001, 'ret_msg': 'params error: symbol invalid symbol', 'result': {}, 'ext_code': '', 'ext_info': '', 'time_now': '1675079133.730800', 'rate_limit_status': 99, 'rate_limit': 100, 'rate_limit_reset_ms': 1675079133719}, <bravado.requests_client.RequestsResponseAdapter object at 0x7fe82f683c40>)
-({'ret_code': 10001, 'ret_msg': 'params error: symbol invalid symbol', 'result': {}, 'ext_code': '', 'ext_info': '', 'time_now': '1675079134.009226', 'rate_limit_status': 599, 'rate_limit': 600, 'rate_limit_reset_ms': 1675079134008}, <bravado.requests_client.RequestsResponseAdapter object at 0x7fe82f682d40>)
-({'ret_code': 10001, 'ret_msg': 'params error: symbol invalid symbol', 'result': {}, 'ext_code': '', 'ext_info': '', 'time_now': '1675079134.439355', 'rate_limit_status': 119, 'rate_limit': 120, 'rate_limit_reset_ms': 1675079134438}, <bravado.requests_client.RequestsResponseAdapter object at 0x7fe82f682d70>)
-strategy = json_data["strategy"]
-
+"timestamp": "{{timestamp}}",
+"exchange": "{{exchange}}",
+"symbol": "{{ticker}}",
+"candle": {
+"timestamp": "{{timestamp}}",
+"open": "{{open}}",
+"high": "{{high}}",
+"low": "{{low}}",
+"close": "{{close}}",
+"volume": "{{volume}}",
+},
+"order": {
+"side": "side",
+"symbol": "symbol",
+"type": "Limit",
+"qty": "qty",
+"price": "price",
+"time_in_force": "gtc"
+},
+"passphrase": "{{passphrase}}"
+}
 ## Initialize the Bybit client
 client = bybit.bybit(test=False, api_key= "76QjbsflcrBdSZiSrU", api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
 # Place the order
