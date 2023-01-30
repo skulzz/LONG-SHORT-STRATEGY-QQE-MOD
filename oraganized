@@ -326,5 +326,12 @@ print("Time In Force:", time_in_force)
 
 
 
+expected_passphrase = "a321!"
+if "passphrase" in json_data and json_data["passphrase"] != expected_passphrase:
+    print("Invalid passphrase. Trade not executed.")
+    exit()
+
+
+
 
 
