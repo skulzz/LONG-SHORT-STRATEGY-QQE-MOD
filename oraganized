@@ -16,6 +16,38 @@ print(client.Positions.Positions_myPosition(symbol="symbol").result())
 # If the order is filled, print a message
 
 
+symbol_json_data = json.load(f)
+symbol = symbol_json_data["symbol"]
+
+with open("side.json") as f:
+side_json_data = json.load(f)
+side = side_json_data["side"]
+
+with open("order_type.json") as f:
+order_type_json_data = json.load(f)
+order_type = order_type_json_data["order_type"]
+
+with open("qty.json") as f:
+qty_json_data = json.load(f)
+qty = qty_json_data["qty"]
+
+with open("price.json") as f:
+price_json_data = json.load(f)
+price = price_json_data["price"]
+
+with open("time_in_force.json") as f:
+time_in_force_json_data = json.load(f)
+time_in_force = time_in_force_json_data["time_in_force"]
+    
+symbol = json_data["symbol"]
+side = json_data["side"]
+order_type = json_data["order_type"]
+qty = json_data["qty"]
+price = json_data["price"]
+time_in_force = json_data["time_in_force"]
+
+
+
 76QjbsflcrBdSZiSr
 SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32p
 ## Initialize the Bybit client
