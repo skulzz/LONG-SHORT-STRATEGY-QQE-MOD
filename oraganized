@@ -29,7 +29,15 @@ print(client.Order.Order_getOrders(symbol=strategy["symbol"].result()))
 print(client.Order.Order_cancel(symbol=strategy["symbol"], order_id="a0bc44c0-6ddb-4f41-913d-fa9d5299d7c2").result())
 
 
-
+# Initialize the Bybit client
+client = bybit.bybit(test=True, api_key="<your_api_key>", api_secret="<your_api_secret>")
+# Place the order
+print(client.Order.Order_new(side="side", symbol="symbol", order_type="order_type", qty=100, price=100, time_in_force="time_in_force").result())
+# Get the order ID from the response
+response = client.Order.Order_getOrders(symbol=strategy["symbol"]).result()
+order_id = response["data"][0]["order_id"]
+# Cancel the order
+print(client.Order.Order_cancel(symbol=strategy["symbol"], order_id=order_id).result())
 
 
 
