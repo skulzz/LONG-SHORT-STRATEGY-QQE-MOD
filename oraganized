@@ -260,7 +260,69 @@ else:
     
 
 
+# Load the data
+json_data = json.loads(data)
 
+# Access the values in the dictionary
+passphrase = json_data["passphrase"]
+time = json_data["time"]
+exchange = json_data["exchange"]
+ticker = json_data["ticker"]
+bar = json_data["bar"]
+strategy = json_data.get("strategy", {})
+account = json_data.get("account", {})
+
+# Access the values within the bar dictionary
+bar_time = bar["time"]
+bar_open = bar["open"]
+bar_high = bar["high"]
+bar_low = bar["low"]
+bar_close = bar["close"]
+bar_volume = bar["volume"]
+
+# Access the values within the strategy dictionary
+position_size = strategy.get("position_size", "")
+order_action = strategy.get("order_action", "")
+order_contracts = strategy.get("order_contracts", "")
+order_price = strategy.get("order_price", "")
+order_id = strategy.get("order_id", "")
+market_position = strategy.get("market_position", "")
+market_position_size = strategy.get("market_position_size", "")
+prev_market_position = strategy.get("prev_market_position", "")
+
+# Access the values within the account dictionary
+side = account.get("side", "")
+symbol = account.get("symbol", "")
+order_type = account.get("order_type", "")
+qty = account.get("qty", "")
+price = account.get("price", "")
+time_in_force = account.get("time_in_force", "")
+
+# Print the values
+print("Passphrase:", passphrase)
+print("Time:", time)
+print("Exchange:", exchange)
+print("Ticker:", ticker)
+print("Bar Time:", bar_time)
+print("Bar Open:", bar_open)
+print("Bar High:", bar_high)
+print("Bar Low:", bar_low)
+print("Bar Close:", bar_close)
+print("Bar Volume:", bar_volume)
+print("Position Size:", position_size)
+print("Order Action:", order_action)
+print("Order Contracts:", order_contracts)
+print("Order Price:", order_price)
+print("Order ID:", order_id)
+print("Market Position:", market_position)
+print("Market Position Size:", market_position_size)
+print("Prev Market Position:", prev_market_position)
+print("Side:", side)
+print("Symbol:", symbol)
+print("Order Type:", order_type)
+print("Qty:", qty)
+print("Price:", price)
+print("Time In Force:", time_in_force)
 
 
 
