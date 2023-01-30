@@ -1,4 +1,34 @@
 
+Traceback (most recent call last):
+  File "/home/j/.local/bin/flask", line 8, in <module>
+    sys.exit(main())
+  File "/home/j/.local/lib/python3.10/site-packages/flask/cli.py", line 1047, in main
+    cli.main()
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1053, in main
+    rv = self.invoke(ctx)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1659, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "/usr/lib/python3/dist-packages/click/core.py", line 1395, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 754, in invoke
+    return __callback(*args, **kwargs)
+  File "/usr/lib/python3/dist-packages/click/decorators.py", line 84, in new_func
+    return ctx.invoke(f, obj, *args, **kwargs)
+  File "/usr/lib/python3/dist-packages/click/core.py", line 754, in invoke
+    return __callback(*args, **kwargs)
+  File "/home/j/.local/lib/python3.10/site-packages/flask/cli.py", line 911, in run_command
+    raise e from None
+  File "/home/j/.local/lib/python3.10/site-packages/flask/cli.py", line 897, in run_command
+    app = info.load_app()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/cli.py", line 308, in load_app
+    app = locate_app(import_name, name)
+  File "/home/j/.local/lib/python3.10/site-packages/flask/cli.py", line 218, in locate_app
+    __import__(module_name)
+  File "/home/j/py/app.py", line 152, in <module>
+    with open("side.json") as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'side.json'
+
+
 "timestamp": "{{timestamp}}",
 "exchange": "{{exchange}}",
 "symbol": "{{ticker}}",
