@@ -280,4 +280,16 @@ imap_client.mark_seen(unseen_messages)
 
     # Log out of the email server
     imap_client.logout()
+    
+    
+    
+            # Mark the message as seen
+            imap_client.mark_seen([uid])
+
+        # Sleep for a few seconds before checking for new messages again
+        time.sleep(5)
+
+    # Log out of the email server
+    imap_client.logout()
+    
 
