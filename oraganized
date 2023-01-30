@@ -1,3 +1,22 @@
+py
+Traceback (most recent call last):
+  File "/home/j/py/app.py", line 46, in <module>
+    imap_server.set_flags([unseen_mails], [b'\\Seen'])
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 1264, in set_flags
+    return self._store(b"FLAGS", messages, flags, b"FLAGS", silent=silent)
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 1768, in _store
+    "store", join_message_ids(messages), cmd, seq_to_parenstr(flags), uid=True
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 1906, in join_message_ids
+    return b",".join(_maybe_int_to_bytes(m) for m in messages)
+TypeError: sequence item 0: expected a bytes-like object, SearchIds found
+
+
+
+
+
+
+
+
 search_criteria = {'UNSEEN'}
 email_ids = imap_server.search(search_criteria)
 
