@@ -187,5 +187,23 @@ else:
             low_price = email_body.split("Low: ")[1].split("\n")[0]
             close_price = email_body.split("Close: ")[1].split("\n")[0]
             volume = email_body.split("Volume: ")[1].split("\n")[0]
+            
+            
+            
+            
+            from imapclient import IMAPClient
+
+imap_server = IMAPClient('imap.example.com')
+imap_server.login('myuser', 'mypassword')
+
+imap_server.select_folder('INBOX')
+
+# Search for mails with specific keyword in the subject
+emails = imap_server.search(['SUBJECT "Your keyword"'])
+
+messages = imap_server.fetch(emails, ['BODY[]'])
+
+# Process the new emails
+for email_id, email_data in messages.items():
 
  
