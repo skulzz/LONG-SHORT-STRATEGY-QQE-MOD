@@ -1,11 +1,11 @@
- py
-Traceback (most recent call last):
-  File "/home/j/py/app.py", line 42, in <module>
-    imap_server.mark_seen([email_id])
-AttributeError: 'IMAPClient' object has no attribute 'mark_seen'
- 
- 
- 
+search_criteria = {'UNSEEN'}
+email_ids = imap_server.search(search_criteria)
+
+# Get the first email
+email_id = email_ids[0]
+
+# Mark the email as seen
+imap_server.set_flags([email_id], [b'\\Seen'])
  
  
  
