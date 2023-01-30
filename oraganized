@@ -1,3 +1,44 @@
+Traceback (most recent call last):
+  File "/home/j/py/app.py", line 167, in <module>
+    print(client.Order.Order_new(side="side",symbol="symbol", order_type="order_type",qty="qty", price="price", time_in_force="time_in_force").result())
+  File "/home/j/.local/lib/python3.10/site-packages/bravado/client.py", line 246, in __call__
+    request_params = construct_request(
+  File "/home/j/.local/lib/python3.10/site-packages/bravado/client.py", line 285, in construct_request
+    construct_params(operation, request, op_kwargs)
+  File "/home/j/.local/lib/python3.10/site-packages/bravado/client.py", line 308, in construct_params
+    marshal_param(param, param_value, request)
+  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/param.py", line 130, in marshal_param
+    value = marshal_schema_object(swagger_spec, param_spec, value)
+  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/marshal.py", line 54, in marshal_schema_object
+    return marshaling_method(value)
+  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/_decorators.py", line 55, in wrapper
+    return func(value)
+  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/marshal.py", line 397, in _marshal_primitive_type
+    raise SwaggerMappingError(
+bravado_core.exception.SwaggerMappingError: ('Error while marshalling value=qty to type=number/int32.', ValueError("invalid literal for int() with base 10: 'qty'"))
+
+# Initialize the Bybit client
+client = bybit.bybit(test=True, api_key="None", api_secret="None")
+# Place the order
+print(client.Order.Order_new(side="side",symbol="symbol", order_type="order_type",qty="qty", price="price", time_in_force="time_in_force").result())
+# Print the response
+print(client.Order.Order_getOrders(symbol=strategy["symbol"].result()))
+# Print the response
+print(client.Order.Order_getOrders(symbol=strategy["symbol"].result()))
+# Get the order ID from the response
+print(client.Order.Order_cancel(symbol=strategy["symbol"], order_id="a0bc44c0-6ddb-4f41-913d-fa9d5299d7c2").result())
+
+
+
+
+
+
+
+
+
+
+
+
 unseen_mails = list(imap_server.search("UNSEEN"))
 imap_server.set_flags([bytes(str(mail_id), 'utf-8') for mail_id in unseen_mails], [b'\\Seen'])
 
