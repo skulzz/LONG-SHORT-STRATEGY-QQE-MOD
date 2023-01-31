@@ -1,3 +1,161 @@
+def execute_trade():  
+    imap_server = IMAPClient('imap-mail.outlook.com',993, ssl=True)
+    imap_server.login('sterxus@outlook.com', 'TheMando321!')
+    imap_server.select_folder('INBOX')
+    
+    while True:
+        unseen_mails = imap_server.search(["UNSEEN"])
+        if unseen_mails:
+            mail_id = list(unseen_mails)[0]
+            email_id, email_data = imap_server.fetch(mail_id, 'RFC822').popitem()
+            email_body = email_data.get_body().decode()
+            passphrase = re.search(r'Passphrase: (.*)', email_body).group(1)
+            strategy_position_size = re.search(
+                r'Position size: (.*)', email_body).group(1)
+            strategy_order_action = re.search(
+                r'Order action: (.*)', email_body).group(1)
+            strategy_order_contracts = re.search(
+                r'Order contracts: (.*)', email_body).group(1)
+            strategy_order_price = re.search(
+                r'Order price: (.*)', email_body).group(1)
+            strategy_order_id = re.search(
+                r'Order ID: (.*)', email_body).group(1)
+            strategy_market_position = re.search(
+                r'Market position: (.*)', email_body).group(1)
+            strategy_market_position_size = re.search(
+                r'Market position size: (.*)', email_body).group(1)
+            strategy_prev_market_position = re.search(
+                r'Previous market position: (.*)', email_body).group(1)
+            strategy_prev_market_position_size = re.search(
+                r'Previous market position size: (.*)', email_body).group(1)
+        else:
+            print("No messages found")
+        
+        imap_server.set_flags([bytes(str(mail_id), 'utf-8')], [b'\\Seen'])
+        time.sleep(5)
+    imap_server.logout()
+
+json_data = {
+"timestamp": "{{timestamp}}",
+"exchange": "{{exchange}}",
+"symbol": "{{ticker}}",
+"candle": { 
+        "open": "{{open}}",
+        "high": "{{high}}",
+        "low": "{{low}}",
+        "close": "{{close}}",
+        "volume": "{{volume}}",
+},
+"order": {
+     "side": "side",
+     "symbol": "symbol",
+     "type": "Limit",
+     "qty": "qty",
+     "price": "price",
+     "time_in_force": "gtc"
+},
+"passphrase": "{{passphrase}}"
+}
+
+data = '{"passphrase": "a321!", "time": "2023-01-01T12:00:00", "exchange": "abc", "ticker": "abc_123", "bar": {"time": "2023-01-01T12:00:00", "open": 100.0, "high": 101.0, "low": 99.0, "close": 100.5, "volume": 1000}, "strategy": {"position_size": 100, "order_action": "buy", "order_contracts": 5, "order_price": 100.0, "order_id": 123456, "market_position": "long", "market_position_size": 5}, "account": {"side": "buy", "symbol": "abc_123", "order_type": "limit", "qty": 5, "price": 100.0, "time_in_force": "gtc"}}'
+# Load the data
+json_data = json.loads(data)
+
+# Access the values in the dictionary
+passphrase = json_data["passphrase"]
+time1 = json_data["time"]
+exchange = json_data["exchange"]
+symbol = json_data["ticker"]
+bar = json_data["bar"]
+strategy = json_data.get("strategy", {})
+account = json_data.get("account", {})
+
+# Access the values within the bar dictionary
+bar_time = bar["time"]
+bar_open = bar["open"]
+bar_high = bar["high"]
+bar_low = bar["low"]
+bar_close = bar["close"]
+bar_volume = bar["volume"]
+
+# Access the values within the strategy dictionary
+position_size = strategy.get("position_size", "")
+order_action = strategy.get("order_action", "")
+order_contracts = strategy.get("order_contracts", "")
+order_price = strategy.get("order_price", "")
+order_id = strategy.get("order_id", "")
+market_position = strategy.get("market_position", "")
+market_position_size = strategy.get("market_position_size", "")
+prev_market_position = strategy.get("prev_market_position", "")
+
+# Access the values within the account dictionary
+side = account.get("side", "")
+symbol = account.get("symbol", "")
+order_type = account.get("order_type", "")
+qty = account.get("qty", "")
+price = account.get("price", "")
+time_in_force = account.get("time_in_force", "")
+
+# Print the values
+print("Passphrase:", passphrase)
+print("Time:", time)
+print("Exchange:", exchange)
+print("Ticker:", symbol)
+print("Bar Time:", bar_time)
+print("Bar Open:", bar_open)
+print("Bar High:", bar_high)
+print("Bar Low:", bar_low)
+print("Bar Close:", bar_close)
+print("Bar Volume:", bar_volume)
+print("Position Size:", position_size)
+print("Order Action:", order_action)
+print("Order Contracts:", order_contracts)
+print("Order Price:", order_price)
+print("Order ID:", order_id)
+print("Market Position:", market_position)
+print("Market Position Size:", market_position_size)
+print("Prev Market Position:", prev_market_position)
+print("Side:", side)
+print("Symbol:", symbol)
+print("Order Type:", order_type)
+print("Qty:", qty)
+print("Price:", price)
+print("Time In Force:", time_in_force)
+# Check if the passphrase in the email matches the expected passphrase
+expected_passphrase = "a321!"
+if "passphrase" in json_data and json_data["passphrase"] != expected_passphrase:
+    print("Invalid passphrase. Trade not executed.")
+    exit()
+
+with open("json_data") as f:
+    json_data = json.load(f)
+
+symbol = json_data["symbol"]
+order_side = json_data["side"]
+order_type = json_data["order_type"]
+qty = json_data["qty"]
+price = json_data["price"]
+time_in_force = json_data["time_in_force"]
+strategy = json_data["strategy"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 with open("json_data", "r") as f:
 json_data = json.load(f)
 
