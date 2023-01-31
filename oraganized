@@ -15,6 +15,23 @@
             imap_server.logout()
             return "Error fetching email with ID: " + mail_id
 
+        # Extract the trade parameters from the email
+        account_side = re.search(r'Account side: (.*)', email_body).group(1)
+        account_symbol = re.search(r'Account symbol: (.*)', email_body).group(1)
+        account_order_type = re.search(r'Order type: (.*)', email_body).group(1)
+        account_qty = re.search(r'Order contracts: (.*)', email_body).group(1)
+        account_price = re.search(r'Order price: (.*)', email_body).group(1)
+        account_time_in_force = re.search(r'Time in force: (.*)', email_body).group(1)
+        passphrase = re.search(r'Passphrase: (.)', email_body).group(1)
+        timeframe = re.search(r'Timeframe: (.)', email_body).group(1)
+        account_time_in_force = re.search(r'Time in force: (.*)', email_body).group(1)
+
+        # Mark the email as seen
+        imap_server.set_flags([bytes(str(mail_id), 'utf-8')], [b'\\Seen'])
+    else:
+        print("No messages found")
+        imap_server.log
+
 
 
 
