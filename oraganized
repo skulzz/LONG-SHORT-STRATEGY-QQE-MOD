@@ -1,3 +1,22 @@
+account_symbol = json_data["ticker"]
+account_side = account.get("side", "")
+account_order_type = account.get("order_type", "")
+account_qty = account.get("qty", "")
+account_price = account.get("price", "")
+account_time_in_force = account.get("time_in_force", "")
+saccount_trategy = account.get("strategy", "")
+
+
+
+
+
+
+
+
+
+
+
+
 json_data = {
     "passphrase": "a321!",
     "timeframe": "2023-01-01T12:00:00",
