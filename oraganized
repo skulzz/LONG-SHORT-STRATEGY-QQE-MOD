@@ -1,4 +1,23 @@
-    imap_server = IMAPClient('imap-mail.outlook.com', 993, ssl=True)
+   ssl_context = ssl.create_default_context()
+ssl_context.check_hostname = False
+ssl_context.verify_mode = ssl.CERT_NONE
+
+imap_server = IMAPClient('imap-mail.outlook.com', 993, ssl=True, ssl_context=ssl_context)
+imap_server.login('sterxus@outlook.com', 'TheMando321!')
+imap_server.select_folder('INBOX')
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   imap_server = IMAPClient('imap-mail.outlook.com', 993, ssl=True)
     imap_server.login('sterxus@outlook.com', 'TheMando321!')
     imap_server.select_folder('INBOX')
 
