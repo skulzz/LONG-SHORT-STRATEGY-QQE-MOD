@@ -1,3 +1,47 @@
+ /home/j/py/.venv/bin/python /home/j/py/app.py
+Traceback (most recent call last):
+  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/marshal.py", line 395, in _marshal_primitive_type
+    return swagger_format.to_wire(value)
+  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/formatter.py", line 191, in <lambda>
+    to_wire=lambda i: i if isinstance(i, int) else int(i),
+ValueError: invalid literal for int() with base 10: 'account_qty'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/j/py/app.py", line 73, in <module>
+    print(client.Order.Order_new(side='account_side, symbol=account_symbol', order_type='account_order_type',
+  File "/home/j/.local/lib/python3.10/site-packages/bravado/client.py", line 246, in __call__
+    request_params = construct_request(
+  File "/home/j/.local/lib/python3.10/site-packages/bravado/client.py", line 285, in construct_request
+    construct_params(operation, request, op_kwargs)
+  File "/home/j/.local/lib/python3.10/site-packages/bravado/client.py", line 308, in construct_params
+    marshal_param(param, param_value, request)
+  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/param.py", line 130, in marshal_param
+    value = marshal_schema_object(swagger_spec, param_spec, value)
+  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/marshal.py", line 54, in marshal_schema_object
+    return marshaling_method(value)
+  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/_decorators.py", line 55, in wrapper
+    return func(value)
+  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/marshal.py", line 397, in _marshal_primitive_type
+    raise SwaggerMappingError(
+bravado_core.exception.SwaggerMappingError: ('Error while marshalling value=account_qty to type=number/int32.', ValueError("invalid literal for int() with base 10: 'account_qty'"))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @app.route('/e')
 def execute_trade():
     ssl_context = ssl.create_default_context(cafile=certifi.where())
