@@ -1,3 +1,56 @@
+# Save data to file
+with open("trade_data.txt", "w") as f:
+    f.write(f"Account side: {account_side}\nAccount symbol: {account_symbol}\nAccount volume: {account_volume}")
+
+# Initialize the Bybit client
+client = bybit.bybit(test=False, api_key="76QjbsflcrBdSZiSrU", api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
+
+# Place the order
+order = client.Order.Order_new(side=account_side, symbol=account_symbol, order_type="", qty=account_volume, price="", time_in_force="").result()
+print(order)
+
+if "error" in order:
+    # Delete the data file on failure
+    os.remove("trade_data.txt")
+    return order["error"]["message"]
+else:
+    # Delete the data file on success
+    os.remove("trade_data.txt")
+    return "Order placed successfully"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 from flask import Flask
 import json
 import bybit
