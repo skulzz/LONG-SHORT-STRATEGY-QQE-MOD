@@ -1,3 +1,30 @@
+        else:
+            print("No unread emails found")
+            return
+except Exception as e:
+    print("Error connecting to the IMAP server:", str(e))
+    return
+
+# Perform the trade execution steps here
+# ...
+
+try:
+    imap_server.logout()
+except Exception as e:
+    print("Error logging out from the IMAP server:", str(e))
+    return
+
+
+
+
+
+
+
+
+
+
+
+
 
 [6031, 6179, 6181, 6183]
 Error fetching email with ID: 6031
