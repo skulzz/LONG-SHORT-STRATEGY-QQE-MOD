@@ -1,3 +1,100 @@
+404 -
+[2023-01-30 22:29:26,795] ERROR in app: Exception on / [GET]
+Traceback (most recent call last):
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/home/j/py/app.py", line 21, in execute_trade
+    mail_id = unseen_mails[0].split()[0]
+AttributeError: 'int' object has no attribute 'split'
+from flask import Flask
+import json
+import bybit
+import time
+import re
+from imapclient import IMAPClient
+
+
+app = Flask(__name__)
+
+
+@app.route('/e')
+def execute_trade():
+    imap_server = IMAPClient('imap-mail.outlook.com', 993, ssl=True)
+    imap_server.login('sterxus@outlook.com', 'TheMando321!')
+    imap_server.select_folder('INBOX')
+
+   # Search for the unread emails
+    unseen_mails = imap_server.search(["UNSEEN"])
+    if unseen_mails[0] != b'':
+        mail_id = unseen_mails[0].split()[0]
+        _, email_data = imap_server.fetch(mail_id, "(RFC822)")
+        email_body = email_data[0][1].decode("utf-8")
+
+        # Extract the trade parameters from the email
+        account_side = re.search(r'Account side: (.*)', email_body).group(1)
+        account_symbol = re.search(r'Account symbol: (.*)', email_body).group(1)
+        account_order_type = re.search(r'Order type: (.*)', email_body).group(1)
+        account_qty = re.search(r'Order contracts: (.*)', email_body).group(1)
+        account_price = re.search(r'Order price: (.*)', email_body).group(1)
+        account_time_in_force = re.search(r'Time in force: (.*)', email_body).group(1)
+        passphrase = re.search(r'Passphrase: (.)', email_body).group(1)
+        timeframe = re.search(r'Timeframe: (.)', email_body).group(1)
+        account_time_in_force = re.search(r'Time in force: (.*)', email_body).group(1)
+
+        # Mark the email as seen
+        imap_server.set_flags([bytes(str(mail_id), 'utf-8')], [b'\\Seen'])
+    else:
+        print("No messages found")
+
+    imap_server.logout()
+
+    # Initialize the Bybit client
+    client = bybit.bybit(test=False, api_key="76QjbsflcrBdSZiSrU", api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
+    # Place the order
+    print(client.Order.Order_new(side=account_side, symbol=account_symbol, order_type=account_order_type,
+          qty=account_qty, price=account_price, time_in_force=account_time_in_force).result())   
+# get the order ID from the response
+    print(client.Order.Order_getOrders(symbol=account_symbol).result())
+
+# Cancel the order
+#print(client.Order.Order_cancel(symbol=symbol, order_id=order_id).result())
+
+# Cancel All Active Orders
+#print(client.Order.Order_cancelAll(symbol=symbol).result())
+
+# Replace Active Order
+#print(client.Order.Order_replace(symbol=symbol,
+#      order_id=order_id, qty=account_qty).result())
+# Query Active Orders(real-time)
+    print(client.Order.Order_query(symbol=account_symbol).result())
+
+# My Position
+    print(client.Positions.Positions_myPosition(symbol=account_symbol).result())
+
+if __name__ == '__main__':
+    app.run()
+
+# If the order is filled, print a message
+#if _myPosition == True:
+#    print("Order Active")
+#else:
+#   print("Order not filled.")
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     # Search for the unread emails
     unseen_mails = imap_server.search(["UNSEEN"])
     if unseen_mails[0] != b'':
