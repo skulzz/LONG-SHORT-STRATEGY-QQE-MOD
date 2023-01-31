@@ -1,3 +1,29 @@
+order_price=None, account_side=None, account_volume=None, account_symbol=None):
+    if order_price is not None:
+        order_price = int(order_price)
+    else:
+        order_price = 0
+        
+    if account_side is not None:
+        account_side = int(account_side)
+    else:
+        account_side = 0
+        
+    if account_volume is not None:
+        account_volume = int(account_volume)
+    else:
+        account_volume = 0
+        
+    if account_symbol is not None:
+        account_symbol = int(account_symbol)
+    else:
+        account_symbol = 0
+        
+
+
+
+
+
 can you fix the problems you just mentioned and fix these errors in the script below the errors:
 An error occured
 [2023-01-31 07:51:24,332] ERROR in app: Exception on /e [GET]
