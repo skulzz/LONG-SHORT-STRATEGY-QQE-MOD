@@ -1,4 +1,27 @@
 
+
+
+    except Exception as e:
+     print("Error connecting to the IMAP server:", str(e))
+
+    try:
+        server.logout()
+    except Exception as e:
+        print("Error logging out from the IMAP server:", str(e))
+
+    # Initialize the Bybit client
+        client = bybit.bybit(test=False, api_key="76QjbsflcrBdSZiSrU",                            api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
+    # Place the order
+        print(client.Order.Order_new(side=account_side, symbol=account_symbol, order_type=account_order_type,qty=account_qty, price=account_price, time_in_force=account_time_in_force).result())
+# get the order ID from the response
+        print(client.Order.Order_getOrders(symbol=account_symbol).result())
+
+
+
+
+
+
+
 app = Flask(__name__)
 
 
