@@ -1,3 +1,32 @@
+[2023-01-31 18:57:23,686] ERROR in app: Exception on /e [GET]
+Traceback (most recent call last):
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/home/j/py/app.py", line 27, in execute_trade
+    with IMAPClient(HOST, 995, ssl_context=ssl_context) as server:
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 285, in __init__
+    self._imap = self._create_IMAP4()
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 322, in _create_IMAP4
+    return tls.IMAP4_TLS(
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/tls.py", line 44, in __init__
+    imaplib.IMAP4.__init__(self, host, port)
+  File "/usr/lib/python3.10/imaplib.py", line 205, in __init__
+    self._connect()
+  File "/usr/lib/python3.10/imaplib.py", line 253, in _connect
+    raise self.error(self.welcome)
+
+
+
+
+
+
+
 
 [2023-01-31 18:52:34,518] ERROR in app: Exception on /e/int:order_price/string:account_side/int:account_volume/string:account_symbol [GET]
 Traceback (most recent call last):
