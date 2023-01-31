@@ -1,3 +1,132 @@
+getting these errors in the script below:
+[6031, 6179, 6181, 6183, 6185, 6187, 6189, 6191, 6193]
+Error fetching email with ID: 6031
+Error logging out from the IMAP server: 'dict' object has no attribute 'logout'
+[2023-01-31 03:24:04,317] ERROR in app: Exception on /e [GET]
+Traceback (most recent call last):
+  File "/home/j/py/app.py", line 66, in execute_trade
+    imap_server.logout()
+AttributeError: 'dict' object has no attribute 'logout'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/home/j/py/app.py", line 73, in execute_trade
+    print(client.Order.Order_new(side=account_side, symbol=account_symbol, order_type=account_order_type,qty=account_qty, price=account_price, time_in_force=account_time_in_force).result())
+UnboundLocalError: local variable 'account_side' referenced before assignment 
+ script:
+ rom flask import Flask
+import json
+import bybit
+import ssl
+import certifi
+import re
+from imapclient import IMAPClient
+
+app = Flask(__name__)
+
+
+@app.route('/e')
+
+@app.route('/e')
+def execute_trade():
+    ssl_context = ssl.create_default_context(cafile=certifi.where())
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+    HOST = "outlook.office365.com"
+    USERNAME = "sterxus@outlook.com"
+    PASSWORD = "TheMando321!"
+
+    try:
+        with IMAPClient(HOST, 993, ssl_context=ssl_context) as server:
+            server.login(USERNAME, PASSWORD)
+            imap_server = server.select_folder('INBOX')
+
+            # Search for the unread emails
+            unseen_mails = server.search(["UNSEEN"])
+            print(unseen_mails)
+
+            if unseen_mails:
+                mail_id = str(unseen_mails[0]).split()[0]
+                try:
+                    _, email_data = imap_server.fetch(mail_id, "(RFC822)")
+                    email_body = email_data[0][1].decode("utf-8")
+                except:
+                    print("Error fetching email with ID:", mail_id)
+                else:
+                    # Extract the trade parameters from the email
+                    account_side = re.search(r'Account side: (.*)', email_body).group(1)
+                    account_symbol = re.search(
+                        r'Account symbol: (.*)', email_body).group(1)
+                    account_order_type = re.search(
+                        r'Order type: (.*)', email_body).group(1)
+                    account_qty = re.search(r'Order contracts: (.*)', email_body).group(1)
+                    account_price = re.search(r'Order price: (.*)', email_body).group(1)
+                    account_time_in_force = re.search(
+                        r'Time in force: (.*)', email_body).group(1)
+                    passphrase = re.search(r'Passphrase: (.)', email_body).group(1)
+                    timeframe = re.search(r'Timeframe: (.)', email_body).group(1)
+                    account_time_in_force = re.search(
+                        r'Time in force: (.*)', email_body).group(1)
+                    account_qty = int(account_qty)
+                    # Mark the email as seen
+                    imap_server.set_flags([bytes(str(mail_id), 'utf-8')], [b'\\Seen'])
+
+                    # Perform the trade execution steps here
+                    # ...
+            else:
+                print("No unread emails found")
+    except Exception as e:
+        print("Error connecting to the IMAP server:", str(e))
+
+    try:
+        imap_server.logout()
+    except Exception as e:
+        print("Error logging out from the IMAP server:", str(e))
+
+    # Initialize the Bybit client
+        client = bybit.bybit(test=False, api_key="76QjbsflcrBdSZiSrU",                            api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
+    # Place the order
+        print(client.Order.Order_new(side=account_side, symbol=account_symbol, order_type=account_order_type,qty=account_qty, price=account_price, time_in_force=account_time_in_force).result())
+# get the order ID from the response
+        print(client.Order.Order_getOrders(symbol=account_symbol).result())
+
+# Cancel the order
+# print(client.Order.Order_cancel(symbol=symbol, order_id=order_id).result())
+
+# Cancel All Active Orders
+# print(client.Order.Order_cancelAll(symbol=symbol).result())
+
+# Replace Active Order
+# print(client.Order.Order_replace(symbol=symbol,
+#      order_id=order_id, qty=account_qty).result())
+# Query Active Orders(real-time)
+        print(client.Order.Order_query(symbol='account_symbol').result())
+# My Position
+        print(client.Positions.Positions_myPosition(
+        symbol='account_symbol').result())
+
+if __name__ == '__main__':
+    app.run(port=8080)
+
+# If the order is filled, print a message
+# if _myPosition == True:
+#    print("Order Active")
+# else:
+#   print("Order not filled.")
+
+
+
+ 
+ 
  
 app = Flask(__name__)
 
