@@ -1,3 +1,21 @@
+
+[2023-01-31 18:52:34,518] ERROR in app: Exception on /e/int:order_price/string:account_side/int:account_volume/string:account_symbol [GET]
+Traceback (most recent call last):
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+TypeError: execute_trade() missing 4 required positional arguments: 'order_price',
+
+
+
+
+
+
 from flask import Flask, jsonify
 import bybit
 import ssl
