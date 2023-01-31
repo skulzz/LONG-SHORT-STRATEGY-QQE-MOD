@@ -1,3 +1,215 @@
+Fix these errors in the script below:
+({'ret_code': 10001, 'ret_msg': 'params error: symbol invalid abc_123', 'result': {}, 'ext_code': '', 'ext_info': '', 'time_now': '1675133188.433018', 'rate_limit_status': 99, 'rate_limit': 100, 'rate_limit_reset_ms': 1675133188432}, <bravado.requests_client.RequestsResponseAdapter object at 0x7f49f8397dc0>)
+({'ret_code': 10001, 'ret_msg': 'params error: invalid symbol', 'result': {}, 'ext_code': '', 'ext_info': '', 'time_now': '1675133188.991870', 'rate_limit_status': 598, 'rate_limit': 600, 'rate_limit_reset_ms': 1675133188991}, <bravado.requests_client.RequestsResponseAdapter object at 0x7f49f7de6b90>)
+({'ret_code': 10001, 'ret_msg': 'params error: symbol invalid abc_123', 'result': {}, 'ext_code': '', 'ext_info': '', 'time_now': '1675133189.269757', 'rate_limit_status': 119, 'rate_limit': 120, 'rate_limit_reset_ms': 1675133189269}, <bravado.requests_client.RequestsResponseAdapter object at 0x7f49f7de6590>)
+from flask import Flask
+import json
+import bybit
+import time
+import re
+from imapclient import IMAPClient
+import hashlib
+import hmac
+import requests
+import urllib3
+
+
+app = Flask(__name__)
+
+
+@app.route('/')
+def execute_trade():
+    imap_server = IMAPClient('imap-mail.outlook.com', 993, ssl=True)
+    imap_server.login('sterxus@outlook.com', 'TheMando321!')
+    imap_server.select_folder('INBOX')
+
+    while True:
+        unseen_mails = imap_server.search(["UNSEEN"])
+        if unseen_mails:
+            mail_id = list(unseen_mails)[0]
+            email_id, email_data = imap_server.fetch(
+                mail_id, 'RFC822').popitem()
+            email_body = email_data.get_body().decode()
+            passphrase = re.search(r'Passphrase: (.*)', email_body).group(1)
+            strategy_position_size = re.search(
+                r'Position size: (.*)', email_body).group(1)
+            strategy_order_action = re.search(
+                r'Order action: (.*)', email_body).group(1)
+            strategy_order_contracts = re.search(
+                r'Order contracts: (.*)', email_body).group(1)
+            strategy_order_price = re.search(
+                r'Order price: (.*)', email_body).group(1)
+            strategy_order_id = re.search(
+                r'Order ID: (.*)', email_body).group(1)
+            strategy_market_position = re.search(
+                r'Market position: (.*)', email_body).group(1)
+            strategy_market_position_size = re.search(
+                r'Market position size: (.*)', email_body).group(1)
+            strategy_prev_market_position = re.search(
+                r'Previous market position: (.*)', email_body).group(1)
+            strategy_prev_market_position_size = re.search(
+                r'Previous market position size: (.*)', email_body).group(1)
+        else:
+            print("No messages found")
+
+        imap_server.set_flags([bytes(str(mail_id), 'utf-8')], [b'\\Seen'])
+        time.sleep(5)
+        imap_server.logout()
+
+
+json_data = {
+    "passphrase": "a321!",
+    "timeframe": "2023-01-01T12:00:00",
+    "exchange": "abc",
+    "ticker": "abc_123",
+    "bar": {
+        "time": "2023-01-01T12:00:00",
+        "open": 100.0,
+        "high": 101.0,
+        "low": 99.0,
+        "close": 100.5,
+        "volume": 1000
+    },
+    "strategy": {
+        "position_size": 100,
+        "order_action": "buy",
+        "order_contracts": 5,
+        "order_price": 100.0,
+        "order_id": 123456,
+        "market_position": "long"
+    },
+    "account": {
+        "side": "buy",
+        "symbol": "abc_123",
+        "order_type": "limit",
+        "qty": 5,
+        "price": 100.0,
+        "time_in_force": "gtc"
+    }
+}
+
+data = '{"passphrase": "a321!", "timeframe": "2023-01-01T12:00:00", "exchange": "abc", "ticker": "abc_123", "bar": {"time": "2023-01-01T12:00:00", "open": 100.0, "high": 101.0, "low": 99.0, "close": 100.5, "volume": 1000}, "strategy": {"position_size": 100, "order_action": "buy", "order_contracts": 5, "order_price": 100.0, "order_id": 123456, "market_position": "long", "market_position_size": 5}, "account": {"side": "buy", "symbol": "abc_123", "order_type": "limit", "qty": 5, "price": 100.0, "time_in_force": "gtc"}}'
+# Load the data
+json_data = json.loads(data)
+
+# Access the values in the dictionary
+passphrase = json_data["passphrase"]
+timeframe = json_data["timeframe"]
+exchange = json_data["exchange"]
+symbol = json_data["ticker"]
+bar = json_data["bar"]
+strategy = json_data.get("strategy", {})
+account = json_data.get("account", {})
+
+# Access the values within the bar dictionary
+bar_time = bar["time"]
+bar_open = bar["open"]
+bar_high = bar["high"]
+bar_low = bar["low"]
+bar_close = bar["close"]
+bar_volume = bar["volume"]
+
+# Access the values within the strategy dictionary
+strategy_position_size = strategy.get("position_size", "")
+strategy_order_action = strategy.get("order_action", "")
+strategy_order_contracts = strategy.get("order_contracts", "")
+strategy_order_price = strategy.get("order_price", "")
+strategy_order_id = strategy.get("order_id", "")
+strategy_market_position = strategy.get("market_position", "")
+strategy_market_position_size = strategy.get("market_position_size", "")
+strategy_prev_market_position = strategy.get("prev_market_position", "")
+
+# Access the values within the account dictionary
+account_side = account.get("side", "")
+account_symbol = account.get("symbol", "")
+account_order_type = account.get("order_type", "")
+account_qty = account.get("qty", 0)
+account_price = account.get("price", 0.0)
+account_time_in_force = account.get("time_in_force", "")
+
+# Print the values
+print("Passphrase:", passphrase)
+print("Timeframe:", timeframe)
+print("Exchange:", exchange)
+print("Ticker:", symbol)
+print("Bar Time:", bar_time)
+print("Bar Open:", bar_open)
+print("Bar High:", bar_high)
+print("Bar Low:", bar_low)
+print("Bar Close:", bar_close)
+print("Bar Volume:", bar_volume)
+print("Position Size:", strategy_position_size)
+print("Order Action:", strategy_order_action)
+print("Order Contracts:", strategy_order_contracts)
+print("Order Price:", strategy_order_price)
+print("Order ID:", strategy_order_id)
+print("Market Position:", strategy_market_position)
+print("Market Position Size:", strategy_market_position_size)
+print("Prev Market Position:", strategy_prev_market_position)
+print("Side:", account_side)
+print("Symbol:", account_symbol)
+print("Order Type:", account_order_type)
+print("Qty:", account_qty)
+print("Price:", account_price)
+print("Time In Force:", account_time_in_force)
+# Check if the passphrase in the email matches the expected passphrase
+expected_passphrase = "a321!"
+if "passphrase" in json_data and json_data["passphrase"] != expected_passphrase:
+    print("Invalid passphrase. Trade not executed.")
+    exit()
+
+
+json_data = json.loads(data)
+
+ccount_symbol = json_data["ticker"]
+account_side = account.get("side", "")
+account_order_type = account.get("order_type", "")
+account_qty = account.get("qty", "")
+account_price = account.get("price", "")
+account_time_in_force = account.get("time_in_force", "")
+saccount_trategy = account.get("strategy", "")
+
+# Initialize the Bybit client
+client = bybit.bybit(test=False, api_key="76QjbsflcrBdSZiSrU",
+                     api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
+
+# Place the order
+print(client.Order.Order_new(side=account_side, symbol=account_symbol, order_type=account_order_type,
+      qty=account_qty, price=account_price, time_in_force=account_time_in_force).result())
+
+# get the order ID from the response
+response = client.Order.Order_getOrders(symbol=account_symbol).result()
+
+# Cancel the order
+#print(client.Order.Order_cancel(symbol=symbol, order_id=order_id).result())
+
+# Cancel All Active Orders
+#print(client.Order.Order_cancelAll(symbol=symbol).result())
+
+# Replace Active Order
+#print(client.Order.Order_replace(symbol=symbol,
+#      order_id=order_id, qty=account_qty).result())
+# Query Active Orders(real-time)
+print(client.Order.Order_query(symbol=account_symbol).result())
+
+# My Position
+print(client.Positions.Positions_myPosition(symbol=account_symbol).result())
+
+# If the order is filled, print a message
+#if _myPosition == True:
+#    print("Order Active")
+#else:
+#   print("Order not filled.")
+
+
+
+
+
+
+
+
+
+
 # get the order ID from the response
 response = client.Order.Order_getOrders(symbol=account_symbol).result()
 order_id = response[0]["order_id"]
