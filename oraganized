@@ -100,11 +100,6 @@ def execute_trade():
     except Exception as e:
         print("An error occured")
 
-        # Save data to file
-        with open("trade_data.txt", "w") as f:
-            f.write(
-                f"Account side: {account_side}\nAccount symbol: {account_symbol}\nAccount volume: {account_volume}")
-
 # Initialize the Bybit client
     client = bybit.bybit(test=False, api_key="76QjbsflcrBdSZiSrU",
                          api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
