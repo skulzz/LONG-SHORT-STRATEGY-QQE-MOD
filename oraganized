@@ -1,3 +1,147 @@
+can you fix these errors inn my script below:
+
+[2023-01-31 06:47:45,755] ERROR in app: Exception on /e [GET]
+Traceback (most recent call last):
+  File "/home/j/py/app.py", line 25, in execute_trade
+    unseen_mails = server.search(["UNSEEN"])
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 1115, in search
+    return self._search(criteria, charset)
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 1141, in _search
+    data = self._raw_command_untagged(b"SEARCH", args)
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 1639, in _raw_command_untagged
+    typ, data = self._raw_command(command, args, uid=uid)
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 1697, in _raw_command
+    self._imap.send(out)
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/tls.py", line 62, in send
+    self.sock.sendall(data)
+  File "/usr/lib/python3.10/ssl.py", line 1240, in sendall
+    return super().sendall(data, flags)
+OSError: [Errno 9] Bad file descriptor
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/home/j/py/app.py", line 58, in execute_trade
+    f.write(f"Account side: {account_side}\nAccount symbol: {account_symbol}\nAccount volume: {account_volume}")
+UnboundLocalError: local variable 'account_side' referenced before assignment
+script:
+from flask import Flask
+import json
+import bybit
+import ssl
+import certifi
+import re
+from imapclient import IMAPClient
+import os
+
+app = Flask(__name__)
+
+@app.route('/e')
+def execute_trade():
+    ssl_context = ssl.create_default_context(cafile=certifi.where())
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+    HOST = "outlook.office365.com"
+    USERNAME = "sterxus@outlook.com"
+    PASSWORD = "TheMando321!"
+    try:
+        with IMAPClient(HOST, 993, ssl_context=ssl_context) as server:
+         server.login(USERNAME, PASSWORD)
+         imap_server = server.select_folder('INBOX')
+            # Search for the unread emails
+        unseen_mails = server.search(["UNSEEN"])
+        print(unseen_mails)
+        account_side = None
+        if unseen_mails:
+            mail_id = str(unseen_mails[0]).split()[0]
+        try:
+         _, email_data = imap_server.fetch(mail_id, "(RFC822)")
+         email_body = email_data[0][1].decode("utf-8")
+        except:
+               print("Error fetching email with ID:", mail_id)
+        else:
+         account_side = re.search(r'Account side: (.*)', email_body)
+         if account_side:
+          account_side = account_side.group(1)
+         else:
+          account_side = None
+
+        account_symbol = re.search(r'Account symbol: (.*)', email_body)
+        if account_symbol:
+                account_symbol = account_symbol.group(1)
+        else:
+         account_symbol = None
+
+         account_volume = re.search(r'Account volume: (.*)', email_body)
+         if account_volume:
+            account_volume = account_volume.group(1)
+         else:
+            account_volume = None
+    except Exception as e:
+     print("An error occured")
+
+         # Save data to file
+     with open("trade_data.txt", "w") as f:
+        f.write(f"Account side: {account_side}\nAccount symbol: {account_symbol}\nAccount volume: {account_volume}")
+
+# Initialize the Bybit client
+        client = bybit.bybit(test=False, api_key="76QjbsflcrBdSZiSrU", api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
+
+# Place the order
+        print(client.Order.Order_new(side=account_side, symbol=account_symbol, order_type="", qty=account_volume, price="", time_in_force="").result())
+
+#        if "error" in result()
+    # Delete the data file on failure
+#    os.remove("trade_data.txt")
+#    print(order["error"]["message"])
+#else:
+#    # Delete the data file on success
+#    os.remove("trade_data.txt")
+#    print("Order placed successfully")
+# Cancel the order
+# print(client.Order.Order_cancel(symbol=symbol, order_id=order_id).result())
+
+# Cancel All Active Orders
+# print(client.Order.Order_cancelAll(symbol=symbol).result())
+
+# Replace Active Order
+# print(client.Order.Order_replace(symbol=symbol,
+#      order_id=order_id, qty=account_qty).result())
+# Query Active Orders(real-time)
+    print(client.Order.Order_query(symbol='account_symbol').result())
+# My Position
+    print(client.Positions.Positions_myPosition(
+    symbol='account_symbol').result())
+
+if __name__ == '__main__':
+    app.run(port=8081)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Read the data from the file
 with open("email_data.txt", "r") as f:
 lines = f.readlines()
