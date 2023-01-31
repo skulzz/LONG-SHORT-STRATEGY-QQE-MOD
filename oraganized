@@ -1,4 +1,49 @@
 
+[6031, 6179, 6181, 6183]
+Error fetching email with ID: 6031
+[2023-01-31 01:47:00,574] ERROR in app: Exception on /e [GET]
+Traceback (most recent call last):
+  File "/home/j/py/app.py", line 31, in execute_trade
+    _, email_data = server.fetch(mail_id, "(RFC822)")
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 1383, in fetch
+    tag = self._imap._command(*args)
+  File "/usr/lib/python3.10/imaplib.py", line 968, in _command
+    raise self.error("command %s illegal in state %s, "
+imaplib.IMAP4.error: command UID illegal in state LOGOUT, only allowed in states SELECTED
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/imaplib.py", line 1006, in _command
+    self.send(data + CRLF)
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/tls.py", line 62, in send
+    self.sock.sendall(data)
+  File "/usr/lib/python3.10/ssl.py", line 1240, in sendall
+    return super().sendall(data, flags)
+OSError: [Errno 9] Bad file descriptor
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/home/j/py/app.py", line 35, in execute_trade
+    server.logout()
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 513, in logout
+    typ, data = self._imap.logout()
+  File "/usr/lib/python3.10/imaplib.py", line 642, in logout
+    typ, dat = self._simple_command('LOGOUT')
+  File "/usr/lib/python3.10/imaplib.py", line 1230, in _simple_command
+    return self._command_complete(name, self._command(name, *args))
+  File "/usr/lib/python3.10/imaplib.py", line 1008, in _command
+    raise self.abort('socket error: %s' % val)
+imaplib.IMAP4.abort: socket error: [Errno 9] Bad file descriptor
 
 
 
