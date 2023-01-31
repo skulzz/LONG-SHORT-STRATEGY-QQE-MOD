@@ -1,4 +1,35 @@
+
+
+
+
+
 im getting these errors in my script below can you give me a fix
+2023-01-31 01:33:46,791] ERROR in app: Exception on /e [GET]
+Traceback (most recent call last):
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/home/j/py/app.py", line 26, in execute_trade
+    unseen_mails = imap_server.search(["UNSEEN"])
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 1115, in search
+    return self._search(criteria, charset)
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 1141, in _search
+    data = self._raw_command_untagged(b"SEARCH", args)
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 1639, in _raw_command_untagged
+    typ, data = self._raw_command(command, args, uid=uid)
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 1697, in _raw_command
+    self._imap.send(out)
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/tls.py", line 62, in send
+    self.sock.sendall(data)
+  File "/usr/lib/python3.10/ssl.py", line 1240, in sendall
+    return super().sendall(data, flags)
+OSError: [Errno 9] Bad file descriptor
+server.select_folder('INBOX')
 [2023-01-31 01:26:27,168] ERROR in app: Exception on /e [GET]
 Traceback (most recent call last):
   File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
