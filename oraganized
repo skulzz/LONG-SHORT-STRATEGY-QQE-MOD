@@ -1,3 +1,11 @@
+# get the order ID from the response
+response = client.Order.Order_getOrders(symbol=account_symbol).result()
+order_id = response[0]["order_id"]
+
+
+
+
+
 account_symbol = json_data["ticker"]
 account_side = account.get("side", "")
 account_order_type = account.get("order_type", "")
