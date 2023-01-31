@@ -1,3 +1,54 @@
+account_side = re.search(r'Account side: (.*)', email_body)
+if account_side:
+    account_side = account_side.group(1)
+else:
+    account_side = None
+
+account_symbol = re.search(r'Account symbol: (.*)', email_body)
+if account_symbol:
+    account_symbol = account_symbol.group(1)
+else:
+    account_symbol = None
+
+account_order_type = re.search(r'Order type: (.*)', email_body)
+if account_order_type:
+    account_order_type = account_order_type.group(1)
+else:
+    account_order_type = None
+
+account_qty = re.search(r'Order contracts: (.*)', email_body)
+if account_qty:
+    account_qty = account_qty.group(1)
+else:
+    account_qty = None
+
+account_price = re.search(r'Order price: (.*)', email_body)
+if account_price:
+    account_price = account_price.group(1)
+else:
+    account_price = None
+
+account_time_in_force = re.search(r'Time in force: (.*)', email_body)
+if account_time_in_force:
+    account_time_in_force = account_time_in_force.group(1)
+else:
+    account_time_in_force = None
+
+passphrase = re.search(r'Passphrase: (.*)', email_body)
+if passphrase:
+    passphrase = passphrase.group(1)
+else:
+    passphrase = None
+
+timeframe = re.search(r'Timeframe: (.*)', email_body)
+if timeframe:
+    timeframe = timeframe.group(1)
+else:
+    timeframe = None
+
+
+
+
 
 app = Flask(__name__)
 
