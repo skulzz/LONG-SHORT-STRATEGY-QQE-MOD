@@ -1,3 +1,25 @@
+with open("json_data", "r") as f:
+json_data = json.load(f)
+
+symbol = json_data["symbol"]
+order_side = json_data["side"]
+order_type = json_data["order_type"]
+qty = json_data["qty"]
+price = json_data["price"]
+time_in_force = json_data["time_in_force"]
+strategy = json_data["strategy"]
+
+
+
+
+
+
+
+
+
+
+
+
 symbol_json_data = json.load(data)
 symbol = symbol_json_data["symbol"]
 
