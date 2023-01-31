@@ -1,3 +1,46 @@
+    imap_server = IMAPClient('imap-mail.outlook.com', 993, ssl=True)
+    imap_server.login('sterxus@outlook.com', 'TheMando321!')
+    imap_server.select_folder('INBOX')
+
+    # Search for the unread emails
+    unseen_mails = imap_server.search(["UNSEEN"])
+
+    if unseen_mails:
+        mail_id = str(unseen_mails[0]).split()[0]
+        try:
+            _, email_data = imap_server.fetch(mail_id, "(RFC822)")
+            email_body = email_data[0][1].decode("utf-8")
+        except:
+            print("Error fetching email with ID:", mail_id)
+            imap_server.logout()
+            return "Error fetching email with ID: " + mail_id
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Can you fix these errros in the script below:       
 Traceback (most recent call last):
   File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
