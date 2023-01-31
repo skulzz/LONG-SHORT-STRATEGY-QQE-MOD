@@ -1,14 +1,5 @@
-An error occured
-[2023-01-31 08:24:43,025] ERROR in app: Exception on /e [GET]
-Traceback (most recent call last):
-  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/marshal.py", line 395, in _marshal_primitive_type
-    return swagger_format.to_wire(value)
-  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/formatter.py", line 191, in <lambda>
-    to_wire=lambda i: i if isinstance(i, int) else int(i),
-ValueError: invalid literal for int() with base 10: 'None'
-
-During handling of the above exception, another exception occurred:
-
+can you help with these errrors:
+[2023-01-31 08:38:15,698] ERROR in app: Exception on /e [GET]
 Traceback (most recent call last):
   File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
     response = self.full_dispatch_request()
@@ -18,34 +9,122 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
-  File "/home/j/py/app.py", line 93, in execute_trade
-    print(client.Order.Order_new(side=account_side, symbol=account_symbol, order_type="limit",
-  File "/home/j/.local/lib/python3.10/site-packages/bravado/client.py", line 246, in __call__
-    request_params = construct_request(
-  File "/home/j/.local/lib/python3.10/site-packages/bravado/client.py", line 285, in construct_request
-    construct_params(operation, request, op_kwargs)
-  File "/home/j/.local/lib/python3.10/site-packages/bravado/client.py", line 308, in construct_params
-    marshal_param(param, param_value, request)
-  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/param.py", line 130, in marshal_param
-    value = marshal_schema_object(swagger_spec, param_spec, value)
-  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/marshal.py", line 54, in marshal_schema_object
-    return marshaling_method(value)
-  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/_decorators.py", line 55, in wrapper
-    return func(value)
-  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/marshal.py", line 397, in _marshal_primitive_type
-    raise SwaggerMappingError(
-bravado_core.exception.SwaggerMappingError: ('Error while marshalling value=None to type=number/int32.', ValueError("invalid literal for int() with base 10: 'None'"))
-
-
-
-
-2023-01-31 07:56:33,929] ERROR in app: Exception on /e [GET]
-Traceback (most recent call last):
-  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/marshal.py", line 395, in _marshal_primitive_type
-    return swagger_format.to_wire(value)
+  File "/home/j/py/app.py", line 50, in execute_trade
+    with IMAPClient(HOST, 995, ssl_context=ssl_context) as server:
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 285, in __init__
+    self._imap = self._create_IMAP4()
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 322, in _create_IMAP4
+    return tls.IMAP4_TLS(
+  File "/home/j/.local/lib/python3.10/site-packages/imapclient/tls.py", line 44, in __init__
+    imaplib.IMAP4.__init__(self, host, port)
+  File "/usr/lib/python3.10/imaplib.py", line 205, in __init__
+    self._connect()
+  File "/usr/lib/python3.10/imaplib.py", line 253, in _connect
+    raise self.error(self.welcome)
+imaplib.IMAP4.error: None
   File "/home/j/.local/lib/python3.10/site-packages/bravado_core/formatter.py", line 191, in <lambda>
     to_wire=lambda i: i if isinstance(i, int) else int(i),
 ValueError: invalid literal for int() with base 10: 'None'
+
+script:
+from flask import Flask, jsonify
+import bybit
+import ssl
+import certifi
+import re
+from imapclient import IMAPClient
+
+app = Flask(__name__)
+
+
+@app.route('/e')
+def execute_trade(order_price=None, account_side=None, account_volume=None, account_symbol=None):
+    if order_price is None:
+            order_price = 0
+    else:
+        order_price = int(order_price)   
+
+        
+    if account_side is None:
+        account_side = 0
+    else:
+        account_side = int(account_side)
+        
+    if account_volume is None:
+        account_volume = 0
+    else:
+        account_volume = int(account_volume)
+        
+    if account_symbol is None:
+        account_symbol = 0
+    else:
+        account_symbol = int(account_symbol)
+    ssl_context = ssl.create_default_context(cafile=certifi.where())
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+    HOST = "imap-mail.outlook.com"
+    USERNAME = "sterxus@outlook.com"
+    PASSWORD = "TheMando321!"
+    account_symbol = "None"
+    account_volume = "None"
+    account_side = "None"
+    order_price = "None"
+    response = {
+        'account_symbol': account_symbol,
+        'account_volume': account_volume,
+        'account_side': account_side,
+        'order_price': order_price
+    }
+    try:
+        with IMAPClient(HOST, 995, ssl_context=ssl_context) as server:
+            server.login(USERNAME, PASSWORD)
+            imap_server = server.select_folder('INBOX')
+            # Search for the unread emails
+            unseen_mails = server.search(["UNSEEN"])
+            if unseen_mails:
+                mail_id = str(unseen_mails[0]).split()[0]
+                try:
+                    _, email_data = imap_server.fetch(mail_id, "(RFC822)")
+                    email_body = email_data[0][1].decode("utf-8")
+                except Exception as e:
+                    response[
+                        'error'] = f"Error fetching email with ID: {mail_id}. Error: {str(e)}"
+                else:
+                    account_side = re.search(r'Account side: (.*)', email_body)
+                    if account_side:
+                        response['account_side'] = account_side.group(1)
+                    order_price = re.search(r'Price: (.*)', email_body)
+                    if order_price:
+                        response['order_price'] = order_price.group(1)
+                    account_symbol = re.search(
+                        r'Account symbol: (.*)', email_body)
+                    if account_symbol:
+                        response['account_symbol'] = account_symbol.group(1)
+                    account_volume = re.search(r'Account volume: (.*)', email_body)
+                    if account_volume:
+                        response['account_volume'] = account_volume.group(1)
+            else:
+                response['error'] = "No unseen emails found"
+    except ValueError as e:
+        if "invalid literal for int() with base 10: 'None'" in str(e):
+         print("error occured")
+    else:
+        raise e
+        # Save data to file
+        #@with open("trade_data.txt", "w") as f:
+        #    f.write(
+        #        f"Account side: {account_side}\nAccount symbol: {account_symbol}\nAccount volume: {account_volume}")
+
+# Initialize the Bybit client
+    client = bybit.bybit(test=False, api_key="76QjbsflcrBdSZiSrU",
+                         api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
+
+# Place the order
+    if account_side and account_symbol and account_volume:
+        print(client.Order.Order_new(side=account_side, symbol=account_symbol, order_type="limit",
+              qty=account_volume, price=order_price, time_in_force="gtc").result())
+    else:
+        print("Cannot place order")
 
 During handling of the above exception, another exception occurred:
 
