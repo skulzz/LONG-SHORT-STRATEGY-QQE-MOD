@@ -1,3 +1,74 @@
+try:
+    with IMAPClient(HOST, 993, ssl_context=ssl_context) as server:
+        server.login(USERNAME, PASSWORD)
+        imap_server = server.select_folder('INBOX')
+
+        # Search for the unread emails
+        unseen_mails = server.search(["UNSEEN"])
+        print(unseen_mails)
+        account_side = None
+        if unseen_mails:
+            mail_id = str(unseen_mails[0]).split()[0]
+            try:
+                _, email_data = imap_server.fetch(mail_id, "(RFC822)")
+                email_body = email_data[0][1].decode("utf-8")
+            except:
+                print("Error fetching email with ID:", mail_id)
+            else:
+                account_side = re.search(r'Account side: (.*)', email_body)
+                if account_side:
+                    account_side = account_side.group(1)
+                else:
+                    account_side = None
+
+                account_symbol = re.search(r'Account symbol: (.*)', email_body)
+                if account_symbol:
+                    account_symbol = account_symbol.group(1)
+                else:
+                    account_symbol = None
+
+                account_order_type = re.search(r'Order type: (.*)', email_body)
+                if account_order_type:
+                    account_order_type = account_order_type.group(1)
+                else:
+                    account_order_type = None
+
+                account_qty = re.search(r'Order contracts: (.*)', email_body)
+                if account_qty:
+                    account_qty = account_qty.group(1)
+                else:
+                    account_qty = None
+
+                account_price = re.search(r'Order price: (.*)', email_body)
+                if account_price:
+                    account_price = account_price.group(1)
+                else:
+                    account_price = None
+
+                account_time_in_force = re.search(r'Time in force: (.*)', email_body)
+                if account_time_in_force:
+                    account_time_in_force = account_time_in_force.group(1)
+                else:
+                    account_time_in_force = None
+
+                passphrase = re.search(r'Passphrase: (.*)', email_body)
+                if passphrase:
+                    passphrase = passphrase.group(1)
+                else:
+                    passphrase = None
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 fix the indentation on this script:
 @app.route('/e')
