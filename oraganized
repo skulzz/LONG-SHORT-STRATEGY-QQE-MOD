@@ -1,4 +1,123 @@
 json_data = {
+    "passphrase": "a321!",
+    "timeframe": "2023-01-01T12:00:00",
+    "exchange": "abc",
+    "ticker": "abc_123",
+    "bar": {
+        "time": "2023-01-01T12:00:00",
+        "open": 100.0,
+        "high": 101.0,
+        "low": 99.0,
+        "close": 100.5,
+        "volume": 1000
+    },
+    "strategy": {
+        "position_size": 100,
+        "order_action": "buy",
+        "order_contracts": 5,
+        "order_price": 100.0,
+        "order_id": 123456,
+        "market_position": "long"
+    },
+    "account": {
+        "side": "buy",
+        "symbol": "abc_123",
+        "order_type": "limit",
+        "qty": 5,
+        "price": 100.0,
+        "time_in_force": "gtc"
+    }
+}
+
+data = '{"passphrase": "a321!", "timeframe": "2023-01-01T12:00:00", "exchange": "abc", "ticker": "abc_123", "bar": {"time": "2023-01-01T12:00:00", "open": 100.0, "high": 101.0, "low": 99.0, "close": 100.5, "volume": 1000}, "strategy": {"position_size": 100, "order_action": "buy", "order_contracts": 5, "order_price": 100.0, "order_id": 123456, "market_position": "long", "market_position_size": 5}, "account": {"side": "buy", "symbol": "abc_123", "order_type": "limit", "qty": 5, "price": 100.0, "time_in_force": "gtc"}}'
+# Load the data
+json_data = json.loads(data)
+
+# Access the values in the dictionary
+passphrase = json_data["passphrase"]
+timeframe = json_data["timeframe"]
+exchange = json_data["exchange"]
+symbol = json_data["ticker"]
+bar = json_data["bar"]
+strategy = json_data.get("strategy", {})
+account = json_data.get("account", {})
+
+# Access the values within the bar dictionary
+bar_time = bar["time"]
+bar_open = bar["open"]
+bar_high = bar["high"]
+bar_low = bar["low"]
+bar_close = bar["close"]
+bar_volume = bar["volume"]
+
+# Access the values within the strategy dictionary
+strategy_position_size = strategy.get("position_size", "")
+strategy_order_action = strategy.get("order_action", "")
+strategy_order_contracts = strategy.get("order_contracts", "")
+strategy_order_price = strategy.get("order_price", "")
+strategy_order_id = strategy.get("order_id", "")
+strategy_market_position = strategy.get("market_position", "")
+strategy_market_position_size = strategy.get("market_position_size", "")
+strategy_prev_market_position = strategy.get("prev_market_position", "")
+
+# Access the values within the account dictionary
+account_side = account.get("side", "")
+account_symbol = account.get("symbol", "")
+account_order_type = account.get("order_type", "")
+account_qty = account.get("qty", 0)
+account_price = account.get("price", 0.0)
+account_time_in_force = account.get("time_in_force", "")
+
+# Print the values
+print("Passphrase:", passphrase)
+print("Timeframe:", timeframe)
+print("Exchange:", exchange)
+print("Ticker:", symbol)
+print("Bar Time:", bar_time)
+print("Bar Open:", bar_open)
+print("Bar High:", bar_high)
+print("Bar Low:", bar_low)
+print("Bar Close:", bar_close)
+print("Bar Volume:", bar_volume)
+print("Position Size:", strategy_position_size)
+print("Order Action:", strategy_order_action)
+print("Order Contracts:", strategy_order_contracts)
+print("Order Price:", strategy_order_price)
+print("Order ID:", strategy_order_id)
+print("Market Position:", strategy_market_position)
+print("Market Position Size:", strategy_market_position_size)
+print("Prev Market Position:", strategy_prev_market_position)
+print("Side:", account_side)
+print("Symbol:", account_symbol)
+print("Order Type:", account_order_type)
+print("Qty:", account_qty)
+print("Price:", account_price)
+print("Time In Force:", account_time_in_force)
+# Check if the passphrase in the email matches the expected passphrase
+expected_passphrase = "a321!"
+if "passphrase" in json_data and json_data["passphrase"] != expected_passphrase:
+    print("Invalid passphrase. Trade not executed.")
+    exit()
+
+
+json_data = json.loads(data)
+
+account_symbol = json_data["ticker"]
+account_side = json_data["side"]
+account_order_type = json_data["order_type"]
+account_qty = json_data["qty"]
+account_price = json_data["price"]
+account_time_in_force = json_data["time_in_force"]
+saccount_trategy = json_data["strategy"]
+
+
+
+
+
+
+
+
+json_data = {
     "passphrase": "a321!", 
     "time": "2023-01-01T12:00:00", 
     "exchange": "abc", 
