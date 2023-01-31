@@ -1,3 +1,29 @@
+2023-01-30 22:49:54,694] ERROR in app: Exception on /e [GET]
+Traceback (most recent call last):
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/home/j/py/app.py", line 21, in execute_trade
+    mail_id = unseen_mails[0].decode().split()[0]
+AttributeError: 'int' object has no attribute 'decode'
+
+
+
+
+
+
+
+
+
+
+
+
+
 404 -
 [2023-01-30 22:29:26,795] ERROR in app: Exception on / [GET]
 Traceback (most recent call last):
