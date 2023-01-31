@@ -1,6 +1,88 @@
 symbol_json_data = json.load(data)
 symbol = symbol_json_data["symbol"]
 
+with open("json_data", "r") as f:
+order_side_json_data = json.load(f)
+order_side = order_side_json_data["side"]
+
+with open("json_data", "r") as f:
+order_type_json_data = json.load(f)
+order_type = order_type_json_data["order_type"]
+
+with open("json_data", "r") as f:
+qty_json_data = json.load(f)
+qty = qty_json_data["qty"]
+
+with open("json_data", "r") as f:
+price_json_data = json.load(f)
+price = price_json_data["price"]
+
+with open("json_data", "r") as f:
+time_in_force_json_data = json.load(f)
+time_in_force = time_in_force_json_data["time_in_force"]
+
+strategy = json_data["strategy"]
+
+Initialize the Bybit client
+client = bybit.bybit(test=False, api_key= "76QjbsflcrBdSZiSrU", api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
+
+Place the order
+print(client.Order.Order_new(side=order_side, symbol=symbol, order_type=order_type, qty=qty, price=price, time_in_force=time_in_force).result())
+
+Get the order ID from the response
+response = client.Order.Order_getOrders(symbol=symbol).result()
+order_id = response[0]["order_id"]
+
+Cancel the order
+print(client.Order.Order_cancel(symbol=symbol, order_id=order_id).result())
+
+Cancel All Active Orders
+print(client.Order.Order_cancelAll(symbol=symbol).result())
+
+Replace Active Order
+print(client.Order.Order_replace(symbol=symbol, order_id=order_id, p_r_qty=qty).result())
+#Query Active Orders(real-time)
+print(client.Order.Order_query(symbol=symbol, order_id=order_id).result())
+
+My Position
+my_position = client.Positions.Positions_myPosition(symbol=symbol).result()
+
+If the order is filled, print a message
+if my_position == True:
+print("Order Active")
+else:
+print("Order not filled.")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+symbol_json_data = json.load(data)
+symbol = symbol_json_data["symbol"]
+
 with open("json_data") as f:
      order_side_json_data = json.load(f)
      order_side = order_side_json_data["side"]
