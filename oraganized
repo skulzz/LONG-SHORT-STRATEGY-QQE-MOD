@@ -1,5 +1,5 @@
-getting this these errors in my code below can you give a fix
-[2023-01-31 01:15:49,546] ERROR in app: Exception on /e [GET]
+im getting these errors in my script below can you give me a fix
+[2023-01-31 01:26:27,168] ERROR in app: Exception on /e [GET]
 Traceback (most recent call last):
   File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
     response = self.full_dispatch_request()
@@ -9,110 +9,35 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
-  File "/home/j/py/app.py", line 22, in execute_trade
-    imap_server = server.select_folder('INBOX')
-  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 811, in select_folder
-    self._command_and_check("select", self._normalise_folder(folder), readonly)
-  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 1738, in _command_and_check
-    typ, data = meth(*args)
-  File "/usr/lib/python3.10/imaplib.py", line 756, in select
-    typ, dat = self._simple_command(name, mailbox)
-  File "/usr/lib/python3.10/imaplib.py", line 1230, in _simple_command
-    return self._command_complete(name, self._command(name, *args))
-  File "/usr/lib/python3.10/imaplib.py", line 968, in _command
-    raise self.error("command %s illegal in state %s, "
-imaplib.IMAP4.error: command SELECT illegal in state LOGOUT, only allowed in states AUTH, SELECTED
-127.0.0.1 - - [31/Jan/2023 01:15:49] "GET /e HTTP/1.1" 500 -
-/home/j/py/.venv/bin/python /home/j/py/app.py
-^Cj@j-VirtualBox:~/py$ /home/j/py/.venv/bin/python /home/j/py/app.py
- * Serving Flask app 'app'
- * Debug mode: off
-WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
- * Running on http://127.0.0.1:5000
-Press CTRL+C to quit
-[2023-01-31 01:18:13,991] ERROR in app: Exception on /e [GET]
-Traceback (most recent call last):
-  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
-  File "/home/j/py/app.py", line 22, in execute_trade
-    imap_server = server.select_folder('INBOX')
-  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 811, in select_folder
-    self._command_and_check("select", self._normalise_folder(folder), readonly)
-  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 1738, in _command_and_check
-    typ, data = meth(*args)
-  File "/usr/lib/python3.10/imaplib.py", line 756, in select
-    typ, dat = self._simple_command(name, mailbox)
-  File "/usr/lib/python3.10/imaplib.py", line 1230, in _simple_command
-    return self._command_complete(name, self._command(name, *args))
-  File "/usr/lib/python3.10/imaplib.py", line 968, in _command
-    raise self.error("command %s illegal in state %s, "
-imaplib.IMAP4.error: command SELECT illegal in state LOGOUT, only allowed in states AUTH, SELECTED
-127.0.0.1 - - [31/Jan/2023 01:18:13] "GET /e HTTP/1.1" 500 -
-127.0.0.1 - - [31/Jan/2023 01:18:14] "GET /favicon.ico HTTP/1.1" 404 -
-^Cj@j-VirtualBox:~/py$ /home/j/py/.venv/bin/python /home/j/py/app.py
- * Serving Flask app 'app'
- * Debug mode: off
-WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
- * Running on http://127.0.0.1:5000
-Press CTRL+C to quit
-[2023-01-31 01:21:57,214] ERROR in app: Exception on /e [GET]
-Traceback (most recent call last):
-  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
-  File "/home/j/py/app.py", line 22, in execute_trade
-    imap_server = server.select_folder('INBOX')
-  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 811, in select_folder
-    self._command_and_check("select", self._normalise_folder(folder), readonly)
-  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 1738, in _command_and_check
-    typ, data = meth(*args)
-  File "/usr/lib/python3.10/imaplib.py", line 756, in select
-    typ, dat = self._simple_command(name, mailbox)
-  File "/usr/lib/python3.10/imaplib.py", line 1230, in _simple_command
-    return self._command_complete(name, self._command(name, *args))
-  File "/usr/lib/python3.10/imaplib.py", line 968, in _command
-    raise self.error("command %s illegal in state %s, "
-imaplib.IMAP4.error: command SELECT illegal in state LOGOUT, only allowed in states AUTH, SELECTED
-127.0.0.1 - - [31/Jan/2023 01:21:57] "GET /e HTTP/1.1" 500 -
-127.0.0.1 - - [31/Jan/2023 01:21:57] "GET /favicon.ico HTTP/1.1" 404 -
+  File "/home/j/py/app.py", line 25, in execute_trade
+    unseen_mails = imap_server.search(["UNSEEN"])
+AttributeError: 'dict' object has no attribute 'search'
+def execute_trade():
+    HOST = "outlook.office365.com"
+    USERNAME = "sterxus@outlook.com"
+    PASSWORD = "TheMando321!"
+    ssl_context = ssl.create_default_context(cafile=certifi.where())
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+    with IMAPClient(HOST, ssl_context=ssl_context, port=993) as server:
+        server.login(USERNAME, PASSWORD)
+        imap_server = server.select_folder('INBOX')
+
+    # Search for the unread emails
+    unseen_mails = imap_server.search(["UNSEEN"])
+
+    if unseen_mails:
+        mail_id = str(unseen_mails[0]).split()[0]
+        try:
+            _, email_data = imap_server.fetch(mail_id, "(RFC822)")
+            email_body = email_data[0][1].decode("utf-8")
+        except:
+            print("Error fetching email with ID:", mail_id)
+            imap_server.logout()
+            return "Error fetching email with ID: " + mail_id
 
 
-[2023-01-31 01:02:05,537] ERROR in app: Exception on /e [GET]
-Traceback (most recent call last):
-  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
-  File "/home/j/py/app.py", line 23, in execute_trade
-    imap_server = server.select_folder('INBOX')
-  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 811, in select_folder
-    self._command_and_check("select", self._normalise_folder(folder), readonly)
-  File "/home/j/.local/lib/python3.10/site-packages/imapclient/imapclient.py", line 1738, in _command_and_check
-    typ, data = meth(*args)
-  File "/usr/lib/python3.10/imaplib.py", line 756, in select
-    typ, dat = self._simple_command(name, mailbox)
-  File "/usr/lib/python3.10/imaplib.py", line 1230, in _simple_command
-    return self._command_complete(name, self._command(name, *args))
-  File "/usr/lib/python3.10/imaplib.py", line 968, in _command
-    raise self.error("command %s illegal in state %s, "
-imaplib.IMAP4.error: command SELECT illegal in state LOGOUT, only allowed in states AUTH, SELECTED
 
-app = Flask(__name__)
 
 
 @app.route('/e')
