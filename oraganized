@@ -1,3 +1,24 @@
+({'ret_code': 10001, 'ret_msg': 'params error: invalid symbol', 'result': {}, 'ext_code': '', 'ext_info': '', 'time_now': '1675168326.329102', 'rate_limit_status': 599, 'rate_limit': 600, 'rate_limit_reset_ms': 1675168326328}, <bravado.requests_client.RequestsResponseAdapter object at 0x7f2a49c273d0>)
+({'ret_code': 10001, 'ret_msg': 'params error: symbol invalid account_symbol', 'result': {}, 'ext_code': '', 'ext_info': '', 'time_now': '1675168326.660179', 'rate_limit_status': 119, 'rate_limit': 120, 'rate_limit_reset_ms': 1675168326659}, <bravado.requests_client.RequestsResponseAdapter object at 0x7f2a49c27940>)
+[2023-01-31 07:32:06,807] ERROR in app: Exception on /e [GET]
+Traceback (most recent call last):
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1823, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1842, in finalize_request
+    response = self.make_response(rv)
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2134, in make_response
+    raise TypeError(
+TypeError: The view function for 'execute_trade' did not return a valid response. The function either returned None or ended without a return statement.
+
+
+
+
+
+
+
+
 @app.route('/e')
 def execute_trade():
     ssl_context = ssl.create_default_context(cafile=certifi.where())
