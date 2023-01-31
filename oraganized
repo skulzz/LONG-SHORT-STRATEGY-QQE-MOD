@@ -1,3 +1,43 @@
+2023-01-31 07:56:33,929] ERROR in app: Exception on /e [GET]
+Traceback (most recent call last):
+  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/marshal.py", line 395, in _marshal_primitive_type
+    return swagger_format.to_wire(value)
+  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/formatter.py", line 191, in <lambda>
+    to_wire=lambda i: i if isinstance(i, int) else int(i),
+ValueError: invalid literal for int() with base 10: 'None'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/home/j/py/app.py", line 92, in execute_trade
+    print(client.Order.Order_new(side=account_side, symbol=account_symbol, order_type="limit",
+  File "/home/j/.local/lib/python3.10/site-packages/bravado/client.py", line 246, in __call__
+    request_params = construct_request(
+  File "/home/j/.local/lib/python3.10/site-packages/bravado/client.py", line 285, in construct_request
+    construct_params(operation, request, op_kwargs)
+  File "/home/j/.local/lib/python3.10/site-packages/bravado/client.py", line 308, in construct_params
+    marshal_param(param, param_value, request)
+  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/param.py", line 130, in marshal_param
+    value = marshal_schema_object(swagger_spec, param_spec, value)
+  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/marshal.py", line 54, in marshal_schema_object
+    return marshaling_method(value)
+  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/_decorators.py", line 55, in wrapper
+    return func(value)
+  File "/home/j/.local/lib/python3.10/site-packages/bravado_core/marshal.py", line 397, in _marshal_primitive_type
+    raise SwaggerMappingError(
+bravado_core.exception.SwaggerMappingError: ('Error while marshalling value=None to type=number/int32.', ValueError("invalid literal for int() with base 10: 'None'"))
+
+
+
+
 order_price=None, account_side=None, account_volume=None, account_symbol=None):
     if order_price is not None:
         order_price = int(order_price)
