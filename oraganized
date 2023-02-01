@@ -8,6 +8,13 @@ mail_id = mail_ids[0]
 
 
 
+mail_ids = imap.search(None, "SUBJECT \"alert:\" UNSEEN")
+This will search for the latest email with a subject that starts with "alert:" and is also unseen. If you want to search for the latest email regardless of whether it is seen or unseen, you can use this search query instead:
+
+less
+Copy code
+mail_ids = imap.search(None, "SUBJECT \"alert:\" SORT (ARRIVAL DESC)")
+
 
 
 
