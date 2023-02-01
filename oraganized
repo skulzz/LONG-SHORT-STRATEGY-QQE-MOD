@@ -4,6 +4,89 @@ import ssl
 import certifi
 import re
 import imaplib
+
+app = Flask(__name__)
+app.debug = True
+
+@app.route('/e')
+def execute_trade(order_price: int = 0, account_side: str = '', account_volume: int = 0, account_symbol: str = ''):
+    ssl_context = ssl.create_default_context(cafile=certifi.where())
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+    HOST = "imap-mail.outlook.com"
+    USERNAME = "sterxus@outlook.com"
+    PASSWORD = "TheMando321!"
+    response = {}
+    imap = imaplib.IMAP4_SSL(HOST, 993, ssl_context=ssl_context)
+    imap.login(USERNAME, PASSWORD)
+    imap.select('INBOX',readonly=True)
+    unseen_mails = imap.search("UNSEEN")[1][0].split()
+
+    if unseen_mails:
+        mail_id = unseen_mails[0].decode("utf-8")
+        try:
+            result, email_data = imap.fetch(mail_id, "(RFC822)")
+            email_body = email_data[0][1].decode("utf-8")
+        except:
+            imap.close()
+            imap.logout()
+            try:
+                return jsonify(response)
+            except Exception as e:
+                response['error'] = f"Error fetching email with ID: {mail_id}. Error: {str(e)}"
+        else:
+            account_side = re.search(r'Account side: (.*)', email_body)
+            if account_side:
+                response['account_side'] = account_side.group(1)
+
+            order_price = re.search(r'Price: (.*)', email_body)
+            if order_price:
+                response['order_price'] = order_price.group(1)
+
+            account_symbol = re.search(r'Account symbol: (.*)', email_body)
+            if account_symbol:
+                response['account_symbol'] = account_symbol.group(1)
+
+            account_volume = re.search(r'Account volume: (.*)', email_body)
+            if account_volume:
+                response['account_volume'] = account_volume.group(1)
+        else:
+            response['error'] = "No unseen emails found"
+
+    client = bybit.bybit(test=False, api_key="76QjbsflcrBdSZiSrU",
+                        api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
+
+    if account_side and account_symbol and account_volume:
+        print(client.Order.Order_new(side=account_side, symbol=account_symbol, order_type="limit",
+                                      qty=account_volume, price=order_price,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from flask import Flask, jsonify
+import bybit
+import ssl
+import certifi
+import re
+import imaplib
 app = Flask(__name__)
 app.debug = True
 
