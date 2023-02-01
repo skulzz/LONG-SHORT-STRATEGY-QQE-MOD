@@ -1,3 +1,51 @@
+
+File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2548, in __call__
+
+return self.wsgi_app(environ, start_response) [Open an interactive python shell in this frame] 
+
+File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2528, in wsgi_app
+
+response = self.handle_exception(e)
+
+File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
+
+response = self.full_dispatch_request()
+
+File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
+
+rv = self.handle_user_exception(e)
+
+File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
+
+rv = self.dispatch_request()
+
+File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
+
+return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+
+File "/home/j/py/app.py", line 32, in execute_trade
+
+mail_ids = imap.search(None, "SUBJECT \"alert:\" SORT (ARRIVAL DESC)")[0].split("\n")
+
+File "/usr/lib/python3.10/imaplib.py", line 734, in search
+
+typ, dat = self._simple_command(name, *criteria)
+
+File "/usr/lib/python3.10/imaplib.py", line 1230, in _simple_command
+
+return self._command_complete(name, self._command(name, *args))
+
+File "/usr/lib/python3.10/imaplib.py", line 1055, in _command_complete
+
+raise self.error('%s command error: %s %s' % (name, typ, data))
+
+
+
+
+
+
+
+
 app = Flask(__name__)
 app.debug = True
 
