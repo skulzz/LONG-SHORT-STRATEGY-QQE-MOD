@@ -1,3 +1,33 @@
+    try:
+        imap.login(USERNAME, PASSWORD)
+    except imaplib.IMAP4.error as e:
+        response['error'] = f"Error logging in to the email server: {str(e)}"
+        return jsonify(response)
+
+    try:
+        imap.select('INBOX',readonly=True)
+    except imaplib.IMAP4.error as e:
+        response['error'] = f"Error selecting INBOX: {str(e)}"
+        return jsonify(response)
+
+    mail_ids = imap.search(None, "UNSEEN")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 from flask import Flask
 import json
 import bybit
