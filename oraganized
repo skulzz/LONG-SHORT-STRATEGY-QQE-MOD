@@ -1,3 +1,24 @@
+    # Use search(), not status()
+    status, response = imap.uid('search', None, 'UNSEEN', 'SUBJECT "alert:"')
+    if status == 'OK':
+        mail_ids = response[0].split()
+    else:
+        mail_ids = []
+    if not mail_ids:
+        response = {'error': "No unread email with subject 'alert:' found"}
+        return jsonify(response), 500
+
+    mail_id = mail_ids[0]
+
+
+
+
+
+
+
+
+
+
 
 File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2548, in __call__
 
