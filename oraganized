@@ -1,23 +1,45 @@
-can you fix the errors in the code below in a code block:
-Traceback (most recent call last):
-  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2548, in __call__
-    return self.wsgi_app(environ, start_response)
-  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2528, in wsgi_app
-    response = self.handle_exception(e)
-  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
-  File "/home/j/py/app.py", line 56, in execute_trade
-    if account_side and account_symbol and account_volume:
-UnboundLocalError: local variable 'account_side' referenced before assignment
-
-code:    account_side = re.search(r'Account side: (.*)', email_body)
+    account_side = re.search(r'Account side: (.*)', email_body)
     if account_side:
+        response['account_side'] = account_side = account_side.group(1)
+    else:
+        response['error'] = "No 'Account side' found in the email body"
+        return jsonify(response)
+
+    order_price = re.search(r'Price: (.*)', email_body)
+    if order_price:
+        response['order_price'] = order_price = order_price.group(1)
+    else:
+        response['error'] = "No 'Price' found in the email body"
+        return jsonify(response)
+
+    account_symbol = re.search(r'Account symbol: (.*)', email_body)
+    if account_symbol:
+        response['account_symbol'] = account_symbol = account_symbol.group(1)
+    else:
+        response['error'] = "No 'Account symbol' found in the email body"
+        return jsonify(response)
+
+    account_volume = re.search(r'Account volume: (.*)', email_body)
+    if account_volume:
+        response['account_volume'] = account_volume = account_volume.group(1)
+    else:
+        response['error'] = "No 'Account volume' found in the email body"
+        return jsonify(response)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         response['account_side'] = account_side = account_side.group(1)
     else:
         response['error'] = "No 'Account side' found in the email body"
