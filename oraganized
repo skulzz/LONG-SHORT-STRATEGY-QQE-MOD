@@ -13,6 +13,9 @@
     mail_ids = imap.search(None, "UNSEEN")
 
 
+    except (imaplib.IMAP4.error, IndexError, UnicodeDecodeError) as e:
+        response['error'] = f"Error fetching email with ID {mail_id}: {str(e)}"
+        return jsonify(response)
 
 
 
