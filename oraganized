@@ -1,4 +1,60 @@
-    account_side = re.search(r'Account side: (.*)', email_body)
+       ssl_context = ssl.create_default_context(cafile=certifi.where())
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+    HOST = "imap-mail.outlook.com"
+    USERNAME = "sterxus@outlook.com"
+    PASSWORD = "TheMando321!"
+    response = {}
+    imap = imaplib.IMAP4_SSL(HOST, 993, ssl_context=ssl_context)
+    imap.login(USERNAME, PASSWORD)
+    imap.select('INBOX',readonly=True)
+    return_code, mail_ids = imap.search(None, "UNSEEN")
+
+    if mail_ids and mail_ids[0]:
+        mail_id = mail_ids[0].split()[0]
+        try:
+            email_data = imap.fetch(mail_id, "(RFC822)")
+            email_body = email_data[0][1].decode("utf-8")
+        except:
+            imap.close()
+            imap.logout()
+            response['error'] = f"Error fetching email with ID: {mail_id}"
+        else:
+            account_side = re.search(r'Account side: (.*)', email_body)
+            if account_side:
+                response['account_side'] = account_side.group(1)
+
+            order_price = re.search(r'Price: (.*)', email_body)
+            if order_price:
+                response['order_price'] = order_price.group(1)
+
+            account_symbol = re.search(r'Account symbol: (.*)', email_body)
+            if account_symbol:
+                response['account_symbol'] = account_symbol.group(1)
+
+            account_volume = re.search(r'Account volume: (.*)', email_body)
+            if account_volume:
+                response['account_volume'] = account_volume.group(1)
+    else:
+        response['error'] = "No unseen emails found"
+
+    imap.close()
+    imap.logout()
+    return response
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   account_side = re.search(r'Account side: (.*)', email_body)
     if account_side:
         response['account_side'] = account_side = account_side.group(1)
     else:
