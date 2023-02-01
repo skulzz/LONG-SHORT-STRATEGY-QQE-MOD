@@ -1,8 +1,34 @@
+can you fix the errors in the code below in a code block:
+Traceback (most recent call last):
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2548, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2528, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/home/j/py/app.py", line 56, in execute_trade
+    if account_side and account_symbol and account_volume:
+UnboundLocalError: local variable 'account_side' referenced before assignment
+
+code:
+from flask import Flask, jsonify
+import bybit
+import ssl
+import certifi
+import re
+import imaplib
+
 app = Flask(__name__)
 app.debug = True
 
 @app.route('/e')
-def execute_trade(order_price: int = 0, account_side: str = '', account_volume: int = 0, account_symbol: str = ''):
+def execute_trade():
     ssl_context = ssl.create_default_context(cafile=certifi.where())
     ssl_context.check_hostname = False
     ssl_context.verify_mode = ssl.CERT_NONE
@@ -17,38 +43,34 @@ def execute_trade(order_price: int = 0, account_side: str = '', account_volume: 
 
     if unseen_mails:
         mail_id = unseen_mails[0].decode("utf-8")
-        try:
-            email_data = imap.fetch(mail_id, "(RFC822)")
-            email_body = email_data[0][1].decode("utf-8")
-        except:
-            imap.close()
-            imap.logout()
+    try:
+        email_data = imap.fetch(mail_id, "(RFC822)")
+        email_body = email_data[0][1].decode("utf-8")
+    except:
+        imap.close()
+        imap.logout()
 
-            try:
-                return jsonify(response)
-            except Exception as e:
-                response['error'] = f"Error fetching email with ID: {mail_id}. Error: {str(e)}"
+        response['error'] = f"Error fetching email with ID: {mail_id}"
+    else:
+        account_side = re.search(r'Account side: (.*)', email_body)
+        if account_side:
+            response['account_side'] = account_side.group(1)
+
+        order_price = re.search(r'Price: (.*)', email_body)
+        if order_price:
+            response['order_price'] = order_price.group(1)
+
+        account_symbol = re.search(r'Account symbol: (.*)', email_body)
+        if account_symbol:
+            response['account_symbol'] = account_symbol.group(1)
+
+        account_volume = re.search(r'Account volume: (.*)', email_body)
+        if account_volume:
+            response['account_volume'] = account_volume.group(1)
         else:
-            account_side = re.search(r'Account side: (.*)', email_body)
-            if account_side:
-                response['account_side'] = account_side.group(1)
+            response['error'] = "No unseen emails found"
 
-            order_price = re.search(r'Price: (.*)', email_body)
-            if order_price:
-                response['order_price'] = order_price.group(1)
-
-            account_symbol = re.search(r'Account symbol: (.*)', email_body)
-            if account_symbol:
-                response['account_symbol'] = account_symbol.group(1)
-
-            account_volume = re.search(r'Account volume: (.*)', email_body)
-            if account_volume:
-                response['account_volume'] = account_volume.group(1)
-            else:
-                response['error'] = "No unseen emails found"
-
-    client = bybit.bybit(test=False, api_key="76QjbsflcrBdSZiSrU",
-                        api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
+    client = bybit.bybit(test=False, api_key="76QjbsflcrBdSZiSrU",api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
 
     if account_side and account_symbol and account_volume:
         print(client.Order.Order_new(side=account_side, symbol=account_symbol, order_type="limit",qty=account_volume, price=order_price,time_in_force="gtc").result())
@@ -75,56 +97,25 @@ def execute_trade(order_price: int = 0, account_side: str = '', account_volume: 
     print(client.Order.Order_query(symbol='account_symbol').result())
 # My Position
     print(client.Positions.Positions_myPosition(
-        symbol='account_symbol').result())
+        symbol=account_symbol).result())
 
 
 if __name__ == '__main__':
     app.run(port=8082)
-    
-    
-    
-    
-    
-    
 
 
 
 
 
-def execute_trade(order_price: int = 0, account_side: str = '', account_volume: int = 0, account_symbol: str = ''):
-    ssl_context = ssl.create_default_context(cafile=certifi.where())
-    ssl_context.check_hostname = False
-    ssl_context.verify_mode = ssl.CERT_NONE
-    HOST = "imap-mail.outlook.com"
-    USERNAME = "sterxus@outlook.com"
-    PASSWORD = "TheMando321!"
-    response = {}
-    imap = imaplib.IMAP4_SSL(HOST, 993, ssl_context=ssl_context)
-    imap.login(USERNAME, PASSWORD)
-    imap.select('INBOX',readonly=True)
-    unseen_mails = imap.search("UNSEEN")[1][0].split()
 
-    if unseen_mails:
-        mail_id = unseen_mails[0].decode("utf-8")
-        try:
-            result, email_data = imap.fetch(mail_id, "(RFC822)")
-            email_body = email_data[0][1].decode("utf-8")
-        except:
-            imap.close()
-            imap.logout()
 
-            try:
-                return jsonify(response)
-            except Exception as e:
-                response['error'] = f"Error fetching email with ID: {mail_id}. Error: {str(e)}"
-        else:
-            account_side = re.search(r'Account side: (.*)', email_body)
-            if account_side:
-                response['account_side'] = account_side.group(1)
 
-            order_price = re.search(r'Price: (.*)', email_body)
-            if order_price:
-                response['order_price'] = order_price.group(1)
+
+
+
+
+
+order_price.group(1)
 
             account_symbol = re.search(r'Account symbol: (.*)', email_body)
             if account_symbol:
