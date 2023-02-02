@@ -1,3 +1,20 @@
+def get_json_data(email_body):
+    pattern = re.compile(r'{.*}')
+    match = pattern.search(email_body)
+
+    if match:
+        # Extract the JSON data and parse it
+        json_data = match.group()
+        parsed_data = json.loads(json_data)
+        return parsed_data
+    else:
+        # Return None if no JSON data was found
+        return None
+
+
+
+
+
 
     pattern = re.compile(r'{.*}')
     match = pattern.search(email_body)
