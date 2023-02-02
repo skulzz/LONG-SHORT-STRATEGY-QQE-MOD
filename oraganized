@@ -1,3 +1,22 @@
+j@j-VirtualBox:~/py$ /home/j/py/.venv/bin/python /home/j/py/app.py
+Traceback (most recent call last):
+  File "/home/j/py/app.py", line 42, in <module>
+    msg = getMsgs()
+  File "/home/j/py/app.py", line 38, in getMsgs
+    return json.loads(email_body)
+  File "/usr/lib/python3.10/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.10/json/decoder.py", line 340, in decode
+    raise JSONDecodeError("Extra data", s, end)
+json.decoder.JSONDecodeError: Extra data: line 8 column 1 (char 118)
+j@j-VirtualBox:~/py$ 
+
+
+
+
+
+
+
 app = Flask(__name__)
 app.debug = True
 
