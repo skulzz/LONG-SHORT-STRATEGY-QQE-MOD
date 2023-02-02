@@ -1,3 +1,30 @@
+
+File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2548, in __call__
+
+return self.wsgi_app(environ, start_response)
+
+File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2528, in wsgi_app
+
+response = self.handle_exception(e)
+
+File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
+
+response = self.full_dispatch_request()
+
+File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1823, in full_dispatch_request
+
+return self.finalize_request(rv)
+
+File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1842, in finalize_request
+
+response = self.make_response(rv)
+
+File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2134, in make_response
+
+raise TypeError(
+
+
+
 from flask import Flask, jsonify
 import bybit
 import re
