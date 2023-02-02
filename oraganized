@@ -1,3 +1,35 @@
+return self.wsgi_app(environ, start_response) [Open an interactive python shell in this frame] 
+
+File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2528, in wsgi_app
+
+response = self.handle_exception(e)
+
+File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
+
+response = self.full_dispatch_request()
+
+File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
+
+rv = self.handle_user_exception(e)
+
+File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
+
+rv = self.dispatch_request()
+
+File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
+
+return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+
+File "/home/j/py/app.py", line 48, in execute_trade
+
+if mail_ids.isdigit():
+
+
+
+
+
+
+
 
 
 imaplib.IMAP4.error: FETCH command error: BAD [b'The specified message set is invalid.']
