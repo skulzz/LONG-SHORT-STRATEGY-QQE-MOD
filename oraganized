@@ -82,6 +82,90 @@ if msg:
 
 
 
+from flask import Flask, jsonify
+import bybit
+import re
+import ssl
+import certifi
+import imaplib
+import json
+import getpass
+import os
+import imaplib
+import email
+from OpenSSL.crypto import load_certificate, FILETYPE_PEM
+app = Flask(__name__)
+app.debug = True
+
+
+@app.route('/e')
+def getMsgs(servername="imap.gmx.com"):
+
+    usernm = "skullze@gmx.com"
+    passwd = "Mando321!"
+    ssl_context = ssl.create_default_context(cafile=certifi.where())
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+    conn = imaplib.IMAP4_SSL(servername, 993, ssl_context=ssl_context)
+    conn.login(usernm, passwd)
+    conn.select('INBOX', readonly=True)
+    typ, data = conn.search(None, "UNSEEN", 'SUBJECT "alert:"')
+    mail_ids = data[0].split()
+    valid_mail_ids = [
+        mail_id for mail_id in mail_ids if mail_id.strip().isalnum()]
+    if not valid_mail_ids:
+        return None
+    mail_id = valid_mail_ids[0]
+    typ, email_data = conn.fetch(mail_id, "(RFC822)")
+    email_body = email_data[0][1].decode('utf-8')
+    return json.loads(email_body)
+    conn.log()
+    conn.logout()
+
+
+response = {}
+msg = getMsgs()
+if msg:
+    result = msg.get('result')
+    if result:
+        response['result'] = result
+    else:
+        response['error'] = "No result information found in the email"
+
+    email_body = json.dumps(msg)
+    account_side = re.search(r'Account side: (.*)', email_body)
+    if account_side:
+        response['account_side'] = account_side = account_side.group(1)
+    else:
+        response['error'] = "No 'Account side' found in the email body"
+
+    order_price = re.search(r'Price: (.*)', email_body)
+    if order_price:
+        response['order_price'] = order_price = float(order_price.group(1))
+    else:
+        response['error'] = "No 'Price' found in the email body"
+    account_symbol = re.search(r'account_symbol: (.*)', email_body)
+    if account_symbol:
+        response['account_symbol'] = account_symbol = account_symbol.group(1)
+    else:
+        response['error'] = "No 'Account symbol' found in the email body"
+
+    account_volume = re.search(r'account_volume: (.*)', email_body)
+    if account_volume:
+        response['account_volume'] = account_volume = account_volume.group(1)
+    else:
+        response['error'] = "No 'Account volume' found in the email body"
+    client = bybit.bybit(test=False, api_key="76QjbsflcrBdSZiSrU",
+                         api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
+
+    if account_side and account_symbol and account_volume:
+        print(client.Order.Order_new(side=account_side, symbol=account_symbol, order_type="limit",
+              qty=account_volume, price=order_price, time_in_force="gtc").result())
+    else:
+        print("Cannot place order")
+
+
+
 
 
 
