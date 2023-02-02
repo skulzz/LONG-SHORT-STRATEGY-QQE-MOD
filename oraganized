@@ -1,4 +1,6 @@
-   def execute_trade():
+   
+   
+   valid_mail_ids = [mail_id for mail_id in mail_ids if mail_id.strip().isdigit() or mail_id.strip().isalnum()]def execute_trade():
     response = {}
     HOST = "imap-mail.outlook.com"
     USERNAME = "sterxus@outlook.com"
