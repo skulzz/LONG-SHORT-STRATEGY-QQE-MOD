@@ -1,3 +1,34 @@
+
+    pattern = re.compile(r'{.*}')
+    match = pattern.search(email_body)
+    
+    if match:
+        # Extract the JSON data and parse it
+        json_data = match.group()
+        parsed_data = json.loads(json_data)
+        conn.logout()
+        return parsed_data
+    else:
+        # Return None if no JSON data was found
+        conn.logout()
+        return None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Traceback (most recent call last)
 
     File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2548, in __call__
