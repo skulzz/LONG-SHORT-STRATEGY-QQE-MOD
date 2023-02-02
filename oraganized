@@ -13,9 +13,8 @@
                 return response, 500
             
             mail_id = valid_mail_ids[0]
-            email
-      
-      
+            email_data = imap.fetch(mail_id, "(RFC822)")[0][1]
+            email_body = email_data.decode('utf-8')
       
       
       
