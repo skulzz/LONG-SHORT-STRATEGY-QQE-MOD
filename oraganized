@@ -1,4 +1,8 @@
-              mail_ids = imap.search(None, "UNSEEN", 'SUBJECT "alert:"')[0].split()
+           valid_mail_ids = [mail_id for mail_id in mail_ids if mail_id.strip().isalnum()]
+       
+       
+       
+       mail_ids = imap.search(None, "UNSEEN", 'SUBJECT "alert:"')[0].split()
             valid_mail_ids = []
             for mail_id in mail_ids:
                 try:
