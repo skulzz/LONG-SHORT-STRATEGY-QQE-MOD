@@ -1,3 +1,40 @@
+
+
+TypeError: parse_json_data() missing 1 required positional argument: 'email_body'
+Traceback (most recent call last)
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2548, in __call__
+
+    return self.wsgi_app(environ, start_response)
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2528, in wsgi_app
+
+    response = self.handle_exception(e)
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
+
+    response = self.full_dispatch_request()
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
+
+    rv = self.handle_user_exception(e)
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
+
+    rv = self.dispatch_request()
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
+
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+
+    TypeError: parse_json_data() missing 1 required positional argument: 'email_body'
+
+
+
+
+
+
+
 def parse_json_data(email_body):
     try:
         data = json.loads(email_body)
