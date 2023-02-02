@@ -93,6 +93,15 @@ def execute_trade():
 
 if __name__ == '__main__':
     app.run(port=5000)
+    
+    
+                json_data = json.loads(email_body)
+            result = json_data.get('result')
+            if result:
+                response['result'] = result
+            else:
+                response['error'] = "No result information found in the email"
+                return response, 500
  
  
  
