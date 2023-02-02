@@ -1,6 +1,30 @@
-   
-   
-   valid_mail_ids = [mail_id for mail_id in mail_ids if mail_id.strip().isdigit() or mail_id.strip().isalnum()]def execute_trade():
+              mail_ids = imap.search(None, "UNSEEN", 'SUBJECT "alert:"')[0].split()
+            valid_mail_ids = []
+            for mail_id in mail_ids:
+                try:
+                    int(mail_id)
+                    valid_mail_ids.append(mail_id)
+                except ValueError:
+                    pass
+            if not valid_mail_ids:
+                response['error'] = "No valid email IDs found in the search results"
+                return response, 500
+            mail_id = valid_mail_ids[0]
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  def execute_trade():
     response = {}
     HOST = "imap-mail.outlook.com"
     USERNAME = "sterxus@outlook.com"
