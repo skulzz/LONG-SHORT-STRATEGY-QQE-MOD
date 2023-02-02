@@ -1,3 +1,9 @@
+Did not attempt to load JSON data because the request Content-Type was not 'application/json'.
+
+
+
+
+
 @app.route("/email", methods=['POST'])
 def parse_json_data():
     email_body = request.get_json()
