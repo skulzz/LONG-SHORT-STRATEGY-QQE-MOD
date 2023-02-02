@@ -1,19 +1,66 @@
-py
-Traceback (most recent call last):
-  File "/home/j/py/app.py", line 43, in <module>
-    msg = getMsgs()
-  File "/home/j/py/app.py", line 37, in getMsgs
+app = Flask(__name__)
+app.debug = True
+
+@app.route('/e')
+def getMsgs(servername="imap.gmx.com"):
+    usernm = "skullze@gmx.com"
+    passwd = "Mando321!"
+    ssl_context = ssl.create_default_context(cafile=certifi.where())
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+    conn = imaplib.IMAP4_SSL(servername, 993, ssl_context=ssl_context)
+    conn.login(usernm, passwd)
+    conn.select('INBOX', readonly=True)
+    typ, data = conn.search(None, "UNSEEN", 'SUBJECT "alert:"')
+    mail_ids = data[0].split()
+    valid_mail_ids = [
+        mail_id for mail_id in mail_ids if mail_id.strip().isalnum()]
+    if not valid_mail_ids:
+        return None
+    mail_id = valid_mail_ids[0]
+    typ, email_data = conn.fetch(mail_id, "(RFC822)")
+    email_body = email_data[0][1].decode('utf-8')
+    start_index = email_body.find("{")
+    end_index = email_body.rfind("}")
+    email_body = email_body[start_index:end_index + 1]
     return json.loads(email_body)
-  File "/usr/lib/python3.10/json/__init__.py", line 346, in loads
-    return _default_decoder.decode(s)
-  File "/usr/lib/python3.10/json/decoder.py", line 337, in decode
-    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
-  File "/usr/lib/python3.10/json/decoder.py", line 355, in raw_decode
-    raise JSONDecodeError("Expecting value", s, err.value) from None
-json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+    conn.logout()
 
+response = {}
+msg = getMsgs()
+if msg:
+    result = msg.get('result')
+    if result:
+        response['result'] = result
+    else:
+        response['error'] = "No result information found in the email"
+        return response, 500
+    
+    account_side = msg.get('Account side')
+    if account_side:
+        response['account_side'] = account_side
+    else:
+        response['error'] = "No 'Account side' found in the email body"
+        return response, 500
 
+    order_price = msg.get('Price')
+    if order_price:
+        response['order_price'] = order_price = float(order_price)
+    else:
+        response['error'] = "No 'Price' found in the email body"
+        return response, 500
 
+    account_symbol = msg.get('account_symbol')
+    if account_symbol:
+        response['account_symbol'] = account_symbol
+    else:
+        response['error'] = "No 'Account symbol' found in the email body"
+        return jsonify(response), 500
+
+    account_volume = msg.get('account_volume')
+    if account_volume:
+        response['account_volume'] = account_volume
+    else:
 
 
 
