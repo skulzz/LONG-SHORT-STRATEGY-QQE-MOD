@@ -1,6 +1,13 @@
-Did not attempt to load JSON data because the request Content-Type was not 'application/json'.
-
-
+    if json_data:
+        url = "http://your-server.com/email"
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(url, headers=headers, json=json.loads(json_data))
+        if response.status_code == 200:
+            print(response.json())
+        else:
+            print("Request failed with status code", response.status_code)
+    else:
+        return None
 
 
 
