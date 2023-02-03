@@ -1,3 +1,37 @@
+def get_parsed_data_from_email_body(email_body):
+    parsed_data = {}
+    account_symbol_match = re.search(
+        r"account_symbol.*?:.*?([\w\d]+)", email_body)
+    if account_symbol_match:
+        parsed_data["account_symbol"] = account_symbol_match.group(1)
+    account_side_match = re.search(r"account_side.*?:.*?([\w\d]+)", email_body)
+    if account_side_match:
+        parsed_data["account_side"] = account_side_match.group(1)
+    account_volume_match = re.search(r"account_volume.*?:.*?(\d+)", email_body)
+    if account_volume_match:
+        parsed_data["account_volume"] = int(account_volume_match.group(1))
+    order_price_match = re.search(r"order_price.*?:.*?(\d+)", email_body)
+    if order_price_match:
+        parsed_data["order_price"] = int(order_price_match.group(1))
+    return parsed_data
+    
+    if parsed_data:
+    print(client.Order.Order_new(
+                symbol=account_symbol, qty=account_volume, side=account_side, type='LIMIT', timeInForce='GTC', limitPrice=order_price).result())
+        else:
+        print("Cannot place order, missing parameters.")
+            print(client.Order.Order_query(symbol='account_symbol').result())
+        print(client.Positions.Positions_myPosition(
+            symbol=account_symbol).result())
+    return "Success"
+
+
+
+
+
+
+
+
 import imaplib
 import ssl
 import certifi
