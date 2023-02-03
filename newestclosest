@@ -1,5 +1,114 @@
 
 
+
+TypeError: The view function for 'get_json_data' did not return a valid response. The function either returned None or ended without a return statement.
+Traceback (most recent call last)
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2548, in __call__
+
+    return self.wsgi_app(environ, start_response)
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2528, in wsgi_app
+
+    response = self.handle_exception(e)
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
+
+    response = self.full_dispatch_request()
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1823, in full_dispatch_request
+
+    return self.finalize_request(rv)
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1842, in finalize_request
+
+    response = self.make_response(rv)
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2134, in make_response
+
+    raise TypeError(
+
+    TypeError: The view function for 'get_json_data' did not return a valid response. The function either returned None or ended without a return statement.
+
+
+
+
+
+
+
+
+
+app = Flask(__name__)
+app.debug = True
+@app.route("/email", methods=['POST', 'GET'])
+def get_json_data():
+ email_body = request.get_data()
+ try:
+  json_data = json.loads(email_body)
+ except json.decoder.JSONDecodeError as e:
+    print("Error parsing json data:" + str(e))
+    json_data = None
+ return json_data
+
+def parse_json_data(json_data):
+    # parse json data to get required information
+    parsed_data = {}
+    data = json_data.get("data")
+    if data:
+        if "order_price" in json_data:
+            parsed_data["order_price"] = json_data["order_price"]
+        if "account_symbol" in json_data:
+            parsed_data["account_symbol"] = json_data["account_symbol"]
+        if "account_side" in json_data:
+            parsed_data["account_side"] = json_data["account_side"]
+        if "account_volume" in json_data:
+            parsed_data["account_volume"] = json_data["account_volume"]
+    return parsed_data
+
+conn = imaplib.IMAP4_SSL("imap.gmx.com")
+conn.login("skullze@gmx.com", "Mando321!")
+conn.select("inbox")
+
+_, email_data = conn.search(None, "UNSEEN")
+email_ids = email_data[0].split()
+
+for email_id in email_ids:
+    _, email_info = conn.fetch(email_id, "(RFC822)")
+    email_body = email_info[0][1].decode("utf-8")
+    json_data = get_json_data(email_body)
+    if json_data:
+        parsed_data = parse_json_data(json_data)
+        account_symbol = parsed_data.get("account_symbol")
+        account_volume = parsed_data.get("account_volume")
+        account_side = parsed_data.get("account_side")
+        order_price = parsed_data.get("order_price")
+        if account_side and account_symbol and account_volume:
+            client = bybit.bybit(test=False, api_key="76QjbsflcrBdSZiSrU",
+                    api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
+            print(client.Order.Order_new(side=account_side, symbol=account_symbol, order_type="limit",
+        qty=account_volume, price=order_price, time_in_force="gtc").result())
+        else:
+            print("Cannot place order 'parsed_data' ")
+  
+            print(client.Order.Order_query(symbol='account_symbol').result())
+# My Position
+            print(client.Positions.Positions_myPosition(
+            symbol=account_symbol).result())
+
+if __name__ == '__main__':
+
+ app.run(port=5003)
+
+
+
+
+
+
+
+
+
+
+
 NameError: name 'account_side' is not defined
 Traceback (most recent call last)
 
