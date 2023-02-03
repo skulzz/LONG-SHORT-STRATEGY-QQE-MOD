@@ -1,3 +1,36 @@
+def handle_request():
+    try:
+        content_type = request.content_type
+    except AttributeError:
+        content_type = None
+
+    if content_type != "application/json":
+        body = request.data
+        try:
+            data = json.loads(body)
+            # do something with the parsed JSON data
+            return "Non-JSON content type, parsed as JSON: {}".format(content_type), 200
+        except json.JSONDecodeError as error:
+            # handle error in parsing body as JSON
+            return "Error in parsing non-JSON content type as JSON: {}".format(error), 400
+    else:
+        data = request.get_json()
+        # do something with the parsed JSON data
+        return "JSON content type: {}".format(content_type), 200
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Error: Invalid Content-Type. Expected 'application/json'
 app = Flask(__name__)
 app.debug = True
