@@ -1,3 +1,113 @@
+Error: Invalid Content-Type. Expected 'application/json'
+app = Flask(__name__)
+app.debug = True
+@app.route("/email", methods=['POST', 'GET'])
+def email_route():
+    if request.content_type != 'application/json':
+        return "Error: Invalid Content-Type. Expected 'application/json'"
+
+    email_body = request.get_json()
+    parsed_data = parse_json_data(email_body)
+    if parsed_data:
+        if "error" in parsed_data:
+            return parsed_data["error"]
+        else:
+            return parsed_data
+    else:
+        return None
+def parse_json_data(email_body):
+ if request.content_type != 'application/json':
+    return "Error: Invalid Content-Type. Expected 'application/json'"
+
+ try:
+    data = json.loads(email_body)
+    account_symbol = data.get("account_symbol")
+    account_side = data.get("account_side")
+    account_volume = data.get("account_volume")
+    order_price = data.get("order_price")
+
+    response = {}
+    response['account_symbol'] = account_symbol
+    response['account_side'] = account_side
+    response['account_volume'] = account_volume
+    response['order_price'] = order_price
+    print(json.dumps(response))
+    return response
+ except json.JSONDecodeError as error:
+        print("Error: Unable to parse JSON data.")
+        print(error)
+
+ def getMsgs(servername="imap.gmx.com"):
+     usernm = "skullze@gmx.com"
+     passwd = "Mando321!"
+     ssl_context = ssl.create_default_context(cafile=certifi.where())
+     ssl_context.check_hostname = False
+     ssl_context.verify_mode = ssl.CERT_NONE
+     conn = imaplib.IMAP4_SSL(servername, 993, ssl_context=ssl_context)
+     conn.login(usernm, passwd)
+     conn.select('INBOX', readonly=True)
+     typ, data = conn.search(None, "UNSEEN", 'SUBJECT "alert:"')
+     mail_ids = data[0].split()
+     valid_mail_ids = [
+     mail_id for mail_id in mail_ids if mail_id.strip().isalnum()]
+     if not valid_mail_ids:
+        conn.logout()
+        return None
+     mail_id = valid_mail_ids[0]
+     typ, email_data = conn.fetch(mail_id, "(RFC822)")
+     email_body = email_data[0][1].decode('utf-8')
+
+     json_data = get_json_data(email_body)
+     if json_data:
+        parsed_data = parse_json_data()
+        conn.logout()
+        return parsed_data
+     else:
+        conn.logout()
+        return None
+
+ def get_json_data(email_body):
+    pattern = re.compile(r'{.*}')
+    match = pattern.search(email_body)
+
+    if match:
+        # Extract the JSON data and parse it
+        json_data = match.group()
+        return json_data
+    else:
+    # Return None if no JSON data was found
+        return None
+ def print(get_json_data):
+    client = bybit.bybit(test=False, api_key="76QjbsflcrBdSZiSrU",
+                     api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
+    if account_side and account_symbol and account_volume:
+        print(client.Order.Order_new(side=account_side, symbol=account_symbol, order_type="limit",
+        qty=account_volume, price=order_price, time_in_force="gtc").result())
+    else:
+        print("Cannot place order 'parsed_data' ")
+  
+    print(client.Order.Order_query(symbol='account_symbol').result())
+# My Position
+    print(client.Positions.Positions_myPosition(
+            symbol=account_symbol).result())
+
+if __name__ == '__main__':
+
+ app.run(port=5003)
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
 app = Flask(__name__)
 app.debug = True
 @app.route("/email", methods=['POST', 'GET'])
