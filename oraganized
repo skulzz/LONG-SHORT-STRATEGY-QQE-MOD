@@ -45,35 +45,17 @@ def getMsgs(servername="imap.gmx.com"):
     email_body = email_data[0][1].decode('utf-8')
     json_data = get_json_data(email_body)
     if json_data:
-        parsed_data = parse_json_data()
+        parsed_data = parse_json_data(json_data)
         conn.logout()
+        client = bybit.bybit(test=False, api_key="76QjbsflcrBdSZiSrU",
+                          api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
+
+        if account_side and account_symbol and account_volume:
+            print(client.Order.Order_new(side=account_side, symbol=account_symbol, order_type="limit",
+                  qty=account_volume, price=order_price, time_in_force="gtc").result())
+        else:
+            print("Cannot place order")
         return parsed_data
-    else:
-        conn.logout()
-        return None
-
-def get_json_data(email_body):
-    pattern = re.compile(r'{.*}')
-    match = pattern.search(email_body)
-
-    if match:
-        # Extract the JSON data and parse it
-        json_data = match.group()
-        return json_data
-    else:
-        # Return None if no JSON data was found
-        return None
-
-    client = bybit.bybit(test=False, api_key="76QjbsflcrBdSZiSrU",
-                         api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
-
-    if account_side and account_symbol and account_volume:
-        print(client.Order.Order_new(side=account_side, symbol=account_symbol, order_type="limit",
-              qty=account_volume, price=order_price, time_in_force="gtc").result())
-    else:
-        print("Cannot place order")
-    
-
 
 
 
