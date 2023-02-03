@@ -1,5 +1,63 @@
 
 
+NameError: name 'account_side' is not defined
+Traceback (most recent call last)
+
+    File "/home/j/py/app.py", line 15, in get_json_data
+
+    json_data = json.loads(email_body)
+
+    File "/usr/lib/python3.10/json/__init__.py", line 346, in loads
+
+    return _default_decoder.decode(s)
+
+    File "/usr/lib/python3.10/json/decoder.py", line 337, in decode
+
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+
+    File "/usr/lib/python3.10/json/decoder.py", line 355, in raw_decode
+
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+
+    During handling of the above exception, another exception occurred:
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2548, in __call__
+
+    return self.wsgi_app(environ, start_response)
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2528, in wsgi_app
+
+    response = self.handle_exception(e)
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
+
+    response = self.full_dispatch_request()
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
+
+    rv = self.handle_user_exception(e)
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
+
+    rv = self.dispatch_request()
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
+
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+
+    File "/home/j/py/app.py", line 17, in get_json_data
+
+    print("Error parsing json data:" + str(e))
+
+    File "/home/j/py/app.py", line 57, in print
+
+    if account_side and account_symbol and account_volume:
+
+
+
+
+
+
+
 TypeError: print() takes 1 positional argument but 2 were given
 Traceback (most recent call last)
 
