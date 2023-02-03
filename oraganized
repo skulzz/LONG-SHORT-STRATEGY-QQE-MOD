@@ -1,3 +1,100 @@
+
+Traceback (most recent call last):
+  File "/home/j/py/app.py", line 18, in <module>
+    data = conn.search(None, "UNSEEN", 'SUBJECT "alert:"')
+  File "/usr/lib/python3.10/imaplib.py", line 734, in search
+    typ, dat = self._simple_command(name, *criteria)
+  File "/usr/lib/python3.10/imaplib.py", line 1230, in _simple_command
+    return self._command_complete(name, self._command(name, *args))
+  File "/usr/lib/python3.10/imaplib.py", line 968, in _command
+    raise self.error("command %s illegal in state %s, "
+imaplib.IMAP4.error: command SEARCH illegal in state NONAUTH, only allowed in states SELECTED
+
+import re
+import imaplib
+import ssl
+import certifi
+import bybit
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+app.debug = True
+
+servername = "imap.gmx.com"
+usernm = "skullze@gmx.com"
+passwd = "Mando321!"
+ssl_context = ssl.create_default_context(cafile=certifi.where())
+ssl_context.check_hostname = False
+ssl_context.verify_mode = ssl.CERT_NONE
+conn = imaplib.IMAP4_SSL(servername, 993, ssl_context=ssl_context)
+data = conn.search(None, "UNSEEN", 'SUBJECT "alert:"')
+mail_ids = data[0].split()
+email_info = conn.fetch(mail_ids, "(RFC822)")
+email_body = email_info[0][1].decode("utf-8")
+
+
+@app.route("/emaill", methods=['POST', 'GET'])
+def email_handler():
+
+    conn.login(usernm, passwd)
+    conn.select('INBOX', readonly=True)
+    typ, data = conn.search(None, "UNSEEN", 'SUBJECT "alert:"')
+    mail_ids = data[0].split()
+    parsed_data = get_parsed_data_from_email_body(email_body)
+    return "success"
+
+
+def get_parsed_data_from_email_body(parsed_data):
+    parsed_data = {}
+    account_symbol_match = re.search(
+        r"account_symbol.*?:.*?([\w\d]+)", email_body)
+    if account_symbol_match:
+        parsed_data["account_symbol"] = account_symbol_match.group(1)
+    account_side_match = re.search(r"account_side.*?:.*?([\w\d]+)", email_body)
+    if account_side_match:
+        parsed_data["account_side"] = account_side_match.group(1)
+    account_volume_match = re.search(r"account_volume.*?:.*?(\d+)", email_body)
+    if account_volume_match:
+        parsed_data["account_volume"] = int(account_volume_match.group(1))
+    order_price_match = re.search(r"order_price.*?:.*?(\d+)", email_body)
+    if order_price_match:
+        parsed_data["order_price"] = int(order_price_match.group(1))
+    return parsed_data
+
+    if parsed_data:
+        account_symbol = parsed_data.get("account_symbol")
+        account_side = parsed_data.get("account_side")
+        account_volume = parsed_data.get("account_volume")
+        order_price = parsed_data.get("order_price")
+
+    if account_symbol and account_side and account_volume and order_price:
+        print(client.Order.Order_new(
+            symbol=account_symbol, qty=account_volume, side=account_side, type='LIMIT', timeInForce='GTC', limitPrice=order_price).result())
+    else:
+        print("Cannot place order, missing parameters.")
+        print(client.Order.Order_query(symbol=account_symbol).result())
+        print(client.Positions.Positions_myPosition(
+            symbol=account_symbol).result())
+    return "Success"
+
+
+if __name__ == "__main__":
+    app.run(port=5003)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if parsed_data:
     account_symbol = parsed_data.get("account_symbol")
     account_side = parsed_data.get("account_side")
