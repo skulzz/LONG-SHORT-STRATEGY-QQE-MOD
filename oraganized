@@ -45,7 +45,37 @@ def get_parsed_data_from_email_body(email_body):
     if account_volume_match:
         parsed_data["account_volume"] = int(account_volume_match.group(1))
     order_price_match = re.search(r"order_price.*?:.*?(\d+)", email_body)
-    if order_price_
+    if order_price_match:
+        parsed_data["order_price"] = int(order_price_match.group(1))
+    return parsed_data
+
+@app.route("/email", methods=['POST', 'GET'])
+def email():
+    conn = imaplib.IMAP4_SSL(servername, 993, ssl_context=ssl_context)
+    conn.login(usernm, passwd)
+    conn.select('INBOX', readonly=True)
+    typ, data = conn.search(None, "UNSEEN", 'SUBJECT "alert:"')
+    mail_ids = data[0].split()
+    for email_id in mail_ids:
+        email_info = conn.fetch(email_id, "(RFC822)")
+        email_body = email_info[0][1].decode("utf-8")
+        parsed_data = get_data_from_email_body(email_body)
+        account_symbol = parsed_data.get("account_symbol")
+        account_volume = parsed_data.get("account_volume")
+        account_side = parsed_data.get("account_side")
+        order_price = parsed_data.get("order_price")
+        if account_symbol and account_volume and account_side and order_price:
+            print(client.Order.Order_new(
+                symbol=account_symbol, qty=account_volume, side=account_side, type='LIMIT', timeInForce='GTC', limitPrice=order_price).result())
+        else:
+            print("Cannot place order, missing parameters.")
+            print(client.Order.Order_query(symbol='account_symbol').result())
+        print(client.Positions.Positions_myPosition(
+            symbol=account_symbol).result())
+    return "Success"
+
+if __name__ == "__main__":
+    app.run(port=5003)
 
 
 
