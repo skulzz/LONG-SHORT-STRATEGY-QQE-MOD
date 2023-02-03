@@ -1,24 +1,21 @@
-def handle_request():
-    try:
-        content_type = request.content_type
-    except AttributeError:
-        content_type = None
 
     if content_type != "application/json":
-        body = request.data
+        # handle non-JSON content type
+        # extract the body and parse it yourself
+        body = request.data.decode("utf-8")
         try:
             data = json.loads(body)
-            # do something with the parsed JSON data
-            return "Non-JSON content type, parsed as JSON: {}".format(content_type), 200
-        except json.JSONDecodeError as error:
-            # handle error in parsing body as JSON
-            return "Error in parsing non-JSON content type as JSON: {}".format(error), 400
+        except json.JSONDecodeError:
+            # handle error in parsing non-JSON content type as JSON
+            return "Error: Unable to parse non-JSON content type as JSON", 400
+        # do something with the parsed data
+        return "Non-JSON content type: {}".format(content_type), 200
     else:
+        # handle JSON content type
+        # request.get_json() method will parse the body as JSON
         data = request.get_json()
         # do something with the parsed JSON data
         return "JSON content type: {}".format(content_type), 200
-
-
 
 
 
