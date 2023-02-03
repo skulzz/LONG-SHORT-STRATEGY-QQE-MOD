@@ -1,13 +1,4 @@
-Traceback (most recent call last):
-  File "/home/j/py/app.py", line 43, in <module>
-    json_data = get_json_data(email_body)
-TypeError: get_json_data() takes 0 positional arguments but 1 was given
-j@j-VirtualBox:~/py$ /home/j/py/.venv/bin/python /home/j/py/app.py
-Traceback (most recent call last):
-  File "/home/j/py/app.py", line 43, in <module>
-    json_data = get_json_data(email_body)
-TypeError: get_json_data() takes 0 positional arguments but 1 was given
-j@j-VirtualBox:~/py$ /home/j/py/.venv/bin/python /home/j/py/app.py
+/home/j/py/.venv/bin/python /home/j/py/app.py
 {'data': {'message': 'This is a test message'}}
 Traceback (most recent call last):
   File "/home/j/py/app.py", line 50, in <module>
