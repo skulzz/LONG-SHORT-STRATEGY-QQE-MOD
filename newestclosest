@@ -1,3 +1,33 @@
+def get_json_data(email_body):
+    json_data = json.loads(email_body)
+    return json_data
+
+email_body = """
+{
+    "data": {
+        "message": "This is a test message"
+    }
+}
+"""
+
+json_data = get_json_data(email_body)
+print(json_data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 py
 Traceback (most recent call last):
   File "/home/j/py/app.py", line 43, in <module>
