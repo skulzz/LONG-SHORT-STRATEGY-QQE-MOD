@@ -56,17 +56,11 @@ def getMsgs(servername="imap.gmx.com"):
         else:
             print("Cannot place order")
         return parsed_data
-
-
-
-
-
-
-
-
-
-
-
+        
+        
+        
+        
+        
 
 
 
