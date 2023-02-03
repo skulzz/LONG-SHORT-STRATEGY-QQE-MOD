@@ -1,3 +1,64 @@
+app = Flask(__name__)
+app.debug = True
+
+
+@app.route("/email", methods=['POST', 'GET'])
+def get_data_from_email_body(email_body):
+    servername = "imap.gmx.com"
+    usernm = "skullze@gmx.com"
+    passwd = "Mando321!"
+    ssl_context = ssl.create_default_context(cafile=certifi.where())
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+    conn = imaplib.IMAP4_SSL(servername, 993, ssl_context=ssl_context)
+    conn.login(usernm, passwd)
+    conn.select('INBOX', readonly=True)
+    typ, data = conn.search(None, "UNSEEN", 'SUBJECT "alert:"')
+    mail_ids = data[0].split()
+    _, email_info = conn.fetch(mail_ids, "(RFC822)")
+    email_body = email_info[0][1].decode("utf-8")
+
+
+def get_data_from_email_body(email_body):
+    parsed_data = {}
+    account_symbol_match = re.search(
+        r"account_symbol.*?:.*?([\w\d]+)", email_body)
+    if account_symbol_match:
+        parsed_data["account_symbol"] = account_symbol_match.group(1)
+    account_side_match = re.search(r"account_side.*?:.*?([\w\d]+)", email_body)
+    if account_side_match:
+        parsed_data["account_side"] = account_side_match.group(1)
+    account_volume_match = re.search(r"account_volume.*?:.*?(\d+)", email_body)
+    if account_volume_match:
+        parsed_data["account_volume"] = int(account_volume_match.group(1))
+    order_price_match = re.search(r"order_price.*?:.*?(\d+)", email_body)
+    if order_price_match:
+        parsed_data["order_price"] = int(order_price_match.group(1))
+        return parsed_data
+
+    email_info = conn.fetch(email_id, "(RFC822)")
+    email_body = email_info[0][1].decode("utf-8")
+    parsed_data = get_data_from_email_body(email_body)
+    account_symbol = parsed_data.get("account_symbol")
+    account_volume = parsed_data.get("account_volume")
+    account_side = parsed_data.get("account_side")
+    order_price = parsed_data.get("order_price")
+    else:
+        print("Cannot place order 'parsed_data' ")
+        print(client.Order.Order_query(symbol='account_symbol').result())
+    print(client.Positions.Positions_myPosition(
+        symbol=account_symbol).result())
+
+
+app.run(port=5003)
+
+
+
+
+
+
+
+
 
 def get_data_from_email_body(email_body):
     parsed_data = {}
