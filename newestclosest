@@ -1,3 +1,104 @@
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2548, in __call__
+
+    return self.wsgi_app(environ, start_response)
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2528, in wsgi_app
+
+    response = self.handle_exception(e)
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 2525, in wsgi_app
+
+    response = self.full_dispatch_request()
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1822, in full_dispatch_request
+
+    rv = self.handle_user_exception(e)
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1820, in full_dispatch_request
+
+    rv = self.dispatch_request()
+
+    File "/home/j/.local/lib/python3.10/site-packages/flask/app.py", line 1796, in dispatch_request
+
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+
+    TypeError: get_json_data() missing 1 required positional argument: 'email_body'
+
+
+app = Flask(__name__)
+app.debug = True
+@app.route("/email", methods=['POST', 'GET'])
+def get_json_data(email_body):
+    #check if email body is in JSON format
+    try:
+        return json.loads(email_body)
+    except:
+        return None
+
+def parse_json_data(json_data):
+    # parse json data to get required information
+    parsed_data = {}
+    if "order_price" in json_data:
+        parsed_data["order_price"] = json_data["order_price"]
+    if "account_symbol" in json_data:
+        parsed_data["account_symbol"] = json_data["account_symbol"]
+    if "account_side" in json_data:
+        parsed_data["account_side"] = json_data["account_side"]
+    if "account_volume" in json_data:
+        parsed_data["account_volume"] = json_data["account_volume"]
+    return parsed_data
+
+conn = imaplib.IMAP4_SSL("imap.gmx.com")
+conn.login("skullze@gmx.com", "Mando321!")
+conn.select("inbox")
+
+_, email_data = conn.search(None, "ALL")
+email_ids = email_data[0].split()
+
+for email_id in email_ids:
+    _, email_info = conn.fetch(email_id, "(RFC822)")
+    email_body = email_info[0][1].decode("utf-8")
+    json_data = get_json_data(email_body)
+    if json_data:
+        parsed_data = parse_json_data(json_data)
+        account_symbol = parsed_data.get("symbol")
+        account_volume = parsed_data.get("volume")
+        account_side = parsed_data.get("side")
+        order_price = parsed_data.get("volume")
+def print(parsed_data):
+    if parsed_data:
+       client = bybit.bybit(test=False, api_key="76QjbsflcrBdSZiSrU",
+                     api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
+       if account_side and account_symbol and account_volume:
+        print(client.Order.Order_new(side=account_side, symbol=account_symbol, order_type="limit",
+        qty=account_volume, price=order_price, time_in_force="gtc").result())
+       else:
+        print("Cannot place order 'parsed_data' ")
+  
+        print(client.Order.Order_query(symbol='account_symbol').result())
+# My Position
+        print(client.Positions.Positions_myPosition(
+            symbol=account_symbol).result())
+
+if __name__ == '__main__':
+
+ app.run(port=5003)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import json
 
 conn = imaplib.IMAP4_SSL("imap.gmail.com")
