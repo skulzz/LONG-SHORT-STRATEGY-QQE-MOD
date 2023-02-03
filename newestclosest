@@ -1,18 +1,16 @@
-/home/j/py/.venv/bin/python /home/j/py/app.py
-Traceback (most recent call last):
-  File "/home/j/py/app.py", line 16, in <module>
+def email_route():
+    if request.content_type != 'application/json':
+        return "Error: Invalid Content-Type. Expected 'application/json'"
+
     email_body = request.get_json()
-  File "/home/j/.local/lib/python3.10/site-packages/werkzeug/local.py", line 316, in __get__
-    obj = instance._get_current_object()  # type: ignore[misc]
-  File "/home/j/.local/lib/python3.10/site-packages/werkzeug/local.py", line 513, in _get_current_object
-    raise RuntimeError(unbound_message) from None
-RuntimeError: Working outside of request context.
-
-This typically means that you attempted to use functionality that needed
-an active HTTP request. Consult the documentation on testing for
-information about how to avoid this problem.
-
-
+    parsed_data = parse_json_data(email_body)
+    if parsed_data:
+        if "error" in parsed_data:
+            return parsed_data["error"]
+        else:
+            return parsed_data
+    else:
+        return None
 
 
 
