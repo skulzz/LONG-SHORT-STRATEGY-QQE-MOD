@@ -1,3 +1,26 @@
+if parsed_data:
+    account_symbol = parsed_data.get("account_symbol")
+    account_side = parsed_data.get("account_side")
+    account_volume = parsed_data.get("account_volume")
+    order_price = parsed_data.get("order_price")
+
+    if account_symbol and account_side and account_volume and order_price:
+        print(client.Order.Order_new(
+            symbol=account_symbol, qty=account_volume, side=account_side, type='LIMIT', timeInForce='GTC', limitPrice=order_price).result())
+    else:
+        print("Cannot place order, missing parameters.")
+        print(client.Order.Order_query(symbol=account_symbol).result())
+        print(client.Positions.Positions_myPosition(
+            symbol=account_symbol).result())
+    return "Success"
+else:
+    print("Cannot place order, missing parameters.")
+
+
+
+
+
+
 def get_parsed_data_from_email_body(email_body):
     parsed_data = {}
     account_symbol_match = re.search(
