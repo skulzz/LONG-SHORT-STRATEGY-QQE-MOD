@@ -1,3 +1,93 @@
+import json
+
+conn = imaplib.IMAP4_SSL("imap.gmail.com")
+conn.login("user@gmail.com", "password")
+conn.select("inbox")
+
+_, email_data = conn.search(None, "ALL")
+email_ids = email_data[0].split()
+
+for email_id in email_ids:
+    _, email_info = conn.fetch(email_id, "(RFC822)")
+    email_body = email_info[0][1].decode("utf-8")
+    json_data = get_json_data(email_body)
+    if json_data:
+        parsed_data = parse_json_data(json_data)
+        account_symbol = parsed_data.get("symbol")
+        client.Order.Order_new(
+            symbol=parsed_data.get("symbol"),
+            clOrdID=parsed_data.get("clOrdID"),
+            ordType=parsed_data.get("ordType"),
+            side=parsed_data.get("side"),
+            orderQty=parsed_data.get("orderQty"),
+            price=parsed_data.get("price"),
+            stopPx=parsed_data.get("stopPx")
+        )
+        client.Order.Order_amend(
+            symbol=account_symbol,
+            orderID=parsed_data.get("orderID"),
+            orderQty=parsed_data.get("orderQty"),
+            price=parsed_data.get("price"),
+            stopPx=parsed_data.get("stopPx")
+        )
+        conn.logout()
+        return parsed_data
+    else:
+        conn.logout()
+return None
+
+def get_json_data(email_body):
+    #check if email body is in JSON format
+    try:
+        return json.loads(email_body)
+    except:
+        return None
+
+def parse_json_data(json_data):
+    # parse json data to get required information
+    parsed_data = {}
+    if "order_id" in json_data:
+        parsed_data["order_id"] = json_data["order_id"]
+    if "symbol" in json_data:
+        parsed_data["symbol"] = json_data["symbol"]
+    if "side" in json_data:
+        parsed_data["side"] = json_data["side"]
+    if "quantity" in json_data:
+        parsed_data["quantity"] = json_data["quantity"]
+    if "price" in json_data:
+        parsed_data["price"] = json_data["price"]
+    return parsed_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     app = Flask(__name__)
 app.debug = True
