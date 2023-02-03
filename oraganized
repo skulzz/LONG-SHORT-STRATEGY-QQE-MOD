@@ -1,3 +1,82 @@
+import imaplib
+import json
+from flask import Flask, request, jsonify
+import bybit
+
+app = Flask(__name__)
+app.debug = True
+
+def parse_json_data(json_data):
+    parsed_data = {}
+    data = json_data.get("data")
+    if data:
+        if "order_price" in json_data:
+            parsed_data["order_price"] = json_data["order_price"]
+        if "account_symbol" in json_data:
+            parsed_data["account_symbol"] = json_data["account_symbol"]
+        if "account_side" in json_data:
+            parsed_data["account_side"] = json_data["account_side"]
+        if "account_volume" in json_data:
+            parsed_data["account_volume"] = json_data["account_volume"]
+    return parsed_data
+
+def get_json_data(email_body):
+    try:
+        json_data = json.loads(email_body)
+    except json.decoder.JSONDecodeError as e:
+        print("Error parsing json data: " + str(e))
+        json_data = None
+    return json_data
+
+@app.route("/email", methods=['POST', 'GET'])
+def process_email():
+    email_body = request.get_data()
+    json_data = get_json_data(email_body)
+    if json_data:
+        parsed_data = parse_json_data(json_data)
+        account_symbol = parsed_data.get("account_symbol")
+        account_volume = parsed_data.get("account_volume")
+        account_side = parsed_data.get("account_side")
+        order_price = parsed_data.get("order_price")
+        if account_side and account_symbol and account_volume:
+            client = bybit.bybit(test=False, api_key="76QjbsflcrBdSZiSrU",
+                    api_secret="SGAAHPUfQnTm1d1EX12ffVaizjbFA4iT32ps")
+            result = client.Order.Order_new(side=account_side, symbol=account_symbol, order_type="limit",
+            qty=account_volume, price=order_price, time_in_force="gtc").result()
+            print(result)
+        else:
+            print("Cannot place order, missing information in 'parsed_data'")
+    else:
+        print("Cannot process email, missing or invalid JSON data")
+    return jsonify(parsed_data)
+
+if __name__ == '__main__':
+    conn = imaplib.IMAP4_SSL("imap.gmx.com")
+    conn.login("skullze@gmx.com", "Mando321!")
+    conn.select("inbox")
+
+    _, email_data = conn.search(None, "UNSEEN")
+    email_ids = email_data[0].split()
+
+    for email_id in email_ids:
+     _, email_info = conn.fetch(email_id, "(RFC822)")
+    email_body = email_info[0][1].decode("utf-8")
+    json_data = get_json_data(email_body)
+    if json_data:
+        parsed_data = parse_json_data(json_data)
+        account_symbol = parsed_data.get("account_symbol")
+        account_volume = parsed_data.get("account_volume")
+        account_side = parsed_data.get("account_side")
+        order_price = parsed_data.get("order_price")
+
+
+
+
+
+
+
+
+
 
 
 app = Flask(__name__)
