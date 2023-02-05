@@ -202,9 +202,3 @@ if sellshortconfirm
     strategy.entry("MacdSE", strategy.short, comment="S")
 if closeallconfirm
     strategy.close_all(comment="E")  
-
-
-// Check strategy profitability
-
-//if withinWindow and abs(hist) < abs(hist[1])
-//    strategy.close_all(comment="Close")
