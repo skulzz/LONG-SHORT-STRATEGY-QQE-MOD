@@ -120,6 +120,7 @@ wtDivOBLevel_add = input(15, title = 'WT 2nd Bearish Divergence', type = input.i
 wtDivOSLevel_add = input(-40, title = 'WT 2nd Bullish Divergence 15 min', type = input.integer)
 
 // RSI+MFI
+
 rsiMFIShow = input(true, title = 'Show MFI', type = input.bool)
 rsiMFIperiod = input(60,title = 'MFI Period', type = input.integer)
 rsiMFIMultiplier = input(150, title = 'MFI Area multiplier', type = input.float)
