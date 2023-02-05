@@ -1,32 +1,3 @@
-    try:
-        imap.login(USERNAME, PASSWORD)
-    except imaplib.IMAP4.error as e:
-        response['error'] = f"Error logging in to the email server: {str(e)}"
-        return jsonify(response)
-
-    try:
-        imap.select('INBOX',readonly=True)
-    except imaplib.IMAP4.error as e:
-        response['error'] = f"Error selecting INBOX: {str(e)}"
-        return jsonify(response)
-
-    mail_ids = imap.search(None, "UNSEEN")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 from flask import Flask
 import json
@@ -44,7 +15,7 @@ app = Flask(__name__)
 @app.route('/')
 def execute_trade():  
     imap_server = IMAPClient('outlook.office365.com',993, ssl=True)
-    imap_server.login('sterxus@outlook.com', 'TheMando321!')
+    imap_server.login('@outlook.com', 'PASSWORD')
     imap_server.select_folder('INBOX')
 # messages = imap_server.fetch(emails, ['BODY[]'])
     while True:
