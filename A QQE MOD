@@ -70,8 +70,12 @@ src2 = input(close, title="RSI Source")
 
 //
 Wilders_Period2 = RSI_Period2 * 2 - 1
-
-
+lookbackStart = input(title="lookbackStart", type=input.integer, defval=16)
+lookbackEnd = input(title="lookbackEnd", type=input.integer, defval=1)
+var start1 = lookbackStart 
+var end = lookbackEnd 
+highestHigh = highest(high[end], start1 - end + 1) 
+lowestLow = lowest(low[end], start1 - end + 1) 
 Rsi2 = rsi(src2, RSI_Period2)
 RsiMa2 = ema(Rsi2, SF2)
 AtrRsi2 = abs(RsiMa2[1] - RsiMa2)
@@ -155,8 +159,73 @@ bot_alert_condition = crossover(hist,0)?3:crossunder(hist,0)?-2:(abs(hist)<abs(h
 
 plotshape(crossover(hist,0), style=shape.labelup, color=color.green,  location=location.bottom, text="L", textcolor=color.white, title="LONG_ORDER")
 plotshape(crossunder(hist,0), style=shape.labeldown, color=color.red,  location=location.top, text="S", textcolor=color.white, title="SHORT_ORDER")
+////BASELINE / SSL1 / SSL2 / EXIT MOVING AVERAGE VALUES
+maType = input(title='SSL1 / Baseline Type', defval='HMA', options=['SMA', 'EMA', 'DEMA', 'TEMA', 'LSMA', 'WMA', 'MF', 'VAMA', 'TMA', 'HMA', 'JMA', 'Kijun v2', 'EDSMA', 'McGinley'])
+len = input(title='SSL1 / Baseline Length', defval=60)
+len3 = input(title='EXIT Length', defval=15)
 
-// === INPUT BACKTEST RANGE ===
+customMA(_src, _length, _type) =>
+   _type == "SMA" ? sma(_src, _length) :
+   _type == "EMA" ? ema(_src, _length) :
+   _type == "WMA" ? wma(_src, _length) : na
+
+emaHigh = customMA(high, len, maType)
+emaLow = customMA(low, len, maType)
+accountRiskPercent = input(2, "Account percent loss per trade", step=0.1, group='Strategy: Risk Management', tooltip='Each trade will risk X% of the account balance')
+swingLength = input(10, "Swing High/Low Lookback Length", group='Strategy: Risk Management', tooltip='Stop Loss is calculated by the swing high or low over the previous X candles')
+swingLow = lowest(source=low, length=swingLength)
+swingHigh = highest(source=high, length=swingLength)
+SSL3Type = input(title='EXIT Type', defval='HMA', options=['DEMA', 'TEMA', 'LSMA', 'VAMA', 'TMA', 'HMA', 'JMA', 'Kijun v2', 'McGinley', 'MF'])
+///EXIT
+ExitHigh = customMA(high, len3, SSL3Type)
+ExitLow = customMA(low, len3, SSL3Type)
+//SSL1 VALUES
+Hlv = int(na)
+Hlv := close > emaHigh ? 1 : close < emaLow ? -1 : Hlv[1]
+sslDown = Hlv < 0 ? emaHigh : emaLow
+//EXIT VALUES
+Hlv3 = int(na)
+Hlv3 := close > ExitHigh ? 1 : close < ExitLow ? -1 : Hlv3[1]
+sslExit = Hlv3 < 0 ? ExitHigh : ExitLow
+base_cross_Long = crossover(close, sslExit)
+base_cross_Short = crossover(sslExit, close)
+codiff = base_cross_Long ? 1 : base_cross_Short ? -1 : na
+longStopPercent = abs((1 - (swingLow / close)) * 100)
+shortStopPercent = abs((1 - (swingHigh / close)) * 100)
+riskAmt = strategy.equity * accountRiskPercent / 100
+longQty = abs(riskAmt / longStopPercent * 100) / close
+shortQty = abs(riskAmt / shortStopPercent * 100) / close
+inLong = strategy.position_size > 0
+inShort = strategy.position_size < 0
+
+var float totalEntryValue = 0.0
+var float totalContracts = 0.0
+
+netProfit() =>
+    float currentPositionValue = strategy.position_avg_price * strategy.position_size
+    float netProfit = currentPositionValue - totalEntryValue
+    netProfit
+
+if (strategy.position_size != strategy.position_size[1])
+    if (strategy.position_size == 0)
+        totalEntryValue := 0.0
+        totalContracts := 0.0
+    else
+        float tradeSize = strategy.position_size - totalContracts
+        float entryPrice = (totalEntryValue + tradeSize * strategy.position_avg_price) / strategy.position_size
+        totalEntryValue := totalEntryValue + (entryPrice * tradeSize)
+        totalContracts := strategy.position_size
+
+openTradesInProfit() =>
+    float currentPositionValue = strategy.position_avg_price * strategy.position_size
+    float profit = currentPositionValue - totalEntryValue
+    bool result = profit / totalEntryValue >= 0.01
+    result
+
+profit = openTradesInProfit()
+// Call the openTradesInProfit function to get the total profit of open trades
+
+// === INPUT BACKTEST RANGE ===ment")
 fromMonth = input(defval = 11, title = "From Month", minval = 1, maxval = 12)
 fromDay = input(defval = 2, title = "From Day", minval = 1, maxval = 31)
 fromYear = input(defval = 2022, title = "From Year", minval = 1970)
@@ -174,6 +243,8 @@ withinWindow = time >= start and time <= finish
 
 buylongconfirm = withinWindow and QQEzlong and (crossover(hist,0))
 sellshortconfirm = withinWindow and QQEzshort and (crossunder(hist,0))
+closeshortconfirm = withinWindow and inShort and base_cross_Long or crossover(close, lowestLow) or profit
+closelongconfirm = withinWindow and inLong and base_cross_Short or crossunder(lowestLow, close) or profit
 closeallconfirm = withinWindow and abs(hist) < abs(hist[1])
 alertcondition(buylongconfirm, title='A', message='L')
 alertcondition(sellshortconfirm, title='Ar', message='S')
@@ -183,6 +254,12 @@ if buylongconfirm
     strategy.entry("MacdLE", strategy.long, comment="l")
 if sellshortconfirm
     strategy.entry("MacdSE", strategy.short, comment="S")
+if closeshortconfirm
+    strategy.close("MacdSE", comment="E")
+if closelongconfirm
+    strategy.close("MacdLE", comment="E")
 if closeallconfirm
     strategy.close_all(comment="E")  
-    
+
+//if withinWindow and abs(hist) < abs(hist[1])
+//    strategy.close_all(comment="Close")
