@@ -54,7 +54,7 @@ QQEzshort = 0
 QQEzshort := nz(QQEzshort[1])
 QQEzlong := RSIndex >= 50 ? QQEzlong + 1 : 0
 QQEzshort := RSIndex < 50 ? QQEzshort + 1 : 0
-//  
+
 
 Zero = hline(0, color=color.white, linestyle=hline.style_dotted, linewidth=1)
 
